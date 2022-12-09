@@ -37,6 +37,7 @@ const getRoomState = (room: Room) => {
 	const players = room.players.map((player) => ({
 		id: player.player.id,
 		isAlive: player.isAlive,
+		color: player.player.color,
 		fromHeadPosition: player.fromHeadPosition,
 	}))
 	return {

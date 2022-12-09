@@ -10,6 +10,15 @@ const context = board.getContext('2d')
 if (!context) {
 	throw new Error('Context construction failed.')
 }
+
+if (window !== window.parent) {
+	document.querySelectorAll('body > *').forEach((element) => {
+		if (element !== board) {
+			element.remove()
+		}
+	})
+}
+
 const fieldSize = 20
 const gapSize = 2
 
@@ -26,9 +35,9 @@ const loop = async () => {
 	} = await response.json()
 	board.width = width * fieldSize
 	board.height = height * fieldSize
-	players.forEach(({ isAlive, fromHeadPosition }) => {
+	players.forEach(({ isAlive, color, fromHeadPosition }) => {
 		fromHeadPosition.forEach(({ x, y }) => {
-			context.fillStyle = isAlive ? 'red' : 'gray'
+			context.fillStyle = isAlive ? `rgb(${color.join(',')})` : 'gray'
 			context.fillRect(
 				x * fieldSize + gapSize / 2,
 				y * fieldSize + gapSize / 2,

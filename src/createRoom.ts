@@ -19,7 +19,7 @@ type PendingObservation = {
 	onTick: () => void
 }
 
-export const createRoom = (width = 10, height = 10, maximumPlayers = 4) => {
+export const createRoom = (width = 32, height = 18, maximumPlayers = 4) => {
 	// @TODO: remove fixed id
 	const id = generateId() && 'fixed-room-id'
 	const state: 'waitingForOtherPlayers' | 'playing' = 'waitingForOtherPlayers'
