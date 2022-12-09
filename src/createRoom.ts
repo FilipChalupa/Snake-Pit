@@ -1,3 +1,4 @@
+import { Player } from './createPlayer'
 import { generateId } from './generateId'
 
 export const createRoom = () => {
@@ -6,6 +7,7 @@ export const createRoom = () => {
 	const height = 10
 	const maximumPlayers = 4
 	const state: 'waitingForOtherPlayers' | 'playing' = 'waitingForOtherPlayers'
+	const players: Player[] = []
 
 	return {
 		id,
@@ -13,6 +15,7 @@ export const createRoom = () => {
 		height,
 		maximumPlayers,
 		state,
+		players,
 	}
 }
 

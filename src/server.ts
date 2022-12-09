@@ -1,5 +1,6 @@
 import cors from 'cors'
 import express from 'express'
+import { createPlayer, Player } from './createPlayer'
 import { createRoom, Room } from './createRoom'
 
 const app = express()
@@ -7,7 +8,9 @@ app.use(cors())
 app.use(express.json())
 
 const rooms: Room[] = []
+const players: Player[] = []
 
+players.push(createPlayer('anonymous'))
 // @TODO: remove
 rooms.push(createRoom())
 
@@ -15,6 +18,7 @@ app.get('/list-rooms', (request, response) => {
 	response.json({
 		rooms: rooms.map((room) => ({
 			id: room.id,
+			connectedPlayers: room.players.length,
 			maximumPlayers: room.maximumPlayers,
 			width: room.width,
 			height: room.height,
@@ -23,21 +27,49 @@ app.get('/list-rooms', (request, response) => {
 	})
 })
 app.post('/create-room', (request, response) => {
-	response.json({})
+	response.status(400).json({
+		error: 'Not implemented.',
+	})
 })
+const getRoomState = (room: Room) => ({
+	id: room.id,
+	maximumPlayers: room.maximumPlayers,
+	width: room.width,
+	height: room.height,
+	state: room.state,
+})
+
 app.get('/room/:id', (request, response) => {
-	response.json({})
+	const room = rooms.find((room) => room.id === request.params.id)
+	if (!room) {
+		response.status(400).json({
+			error: 'Room not found.',
+		})
+		return
+	}
+	return {
+		room: getRoomState(room),
+	}
 })
 app.post('/room/:id', (request, response) => {
 	const room = rooms.find((room) => room.id === request.params.id)
-	console.log(request.body)
-	response.json({
-		id: room.id,
-		maximumPlayers: room.maximumPlayers,
-		width: room.width,
-		height: room.height,
-		state: room.state,
-	})
+	if (!room) {
+		response.status(400).json({
+			error: 'Room not found.',
+		})
+		return
+	}
+	const player = players.find((player) =>
+		player.checkToken(request.body.playerToken),
+	)
+	if (!player) {
+		response.status(400).json({
+			error: 'Player not found.',
+		})
+		return
+	}
+	// @TODO: check if player is already in room, enough space
+	response.json({ room: getRoomState(room) })
 })
 
 app.use(express.static('public'))

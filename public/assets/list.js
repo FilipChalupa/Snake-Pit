@@ -11,6 +11,8 @@ const refresh = async () => {
 					<dl>
 						<dt>State</dt>
 						<dd>${room.state /* @TODO: translate */}</dd>
+						<dt>Connected players</dt>
+						<dd>${room.connectedPlayers}</dd>
 						<dt>Maximum players</dt>
 						<dd>${room.maximumPlayers}</dd>
 						<dt>Room size</dt>
