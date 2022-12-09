@@ -20,8 +20,7 @@ type PendingObservation = {
 }
 
 export const createRoom = (width = 32, height = 18, maximumPlayers = 4) => {
-	// @TODO: remove fixed id
-	const id = generateId() && 'fixed-room-id'
+	const id = generateId()
 	const state: 'waitingForOtherPlayers' | 'playing' = 'waitingForOtherPlayers'
 	const players: PlayingPlayer[] = []
 	// @TODO: food
