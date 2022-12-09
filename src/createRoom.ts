@@ -5,12 +5,14 @@ export const createRoom = () => {
 	const width = 10
 	const height = 10
 	const maximumPlayers = 4
+	const state: 'waitingForOtherPlayers' | 'playing' = 'waitingForOtherPlayers'
 
 	return {
 		id,
 		width,
 		height,
 		maximumPlayers,
+		state,
 	}
 }
 

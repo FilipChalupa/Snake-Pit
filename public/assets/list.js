@@ -9,6 +9,8 @@ const refresh = async () => {
 				<li>
 					<a href="/room/?id=${room.id}">${room.id}</a>
 					<dl>
+						<dt>State</dt>
+						<dd>${room.state /* @TODO: translate */}</dd>
 						<dt>Maximum players</dt>
 						<dd>${room.maximumPlayers}</dd>
 						<dt>Room size</dt>

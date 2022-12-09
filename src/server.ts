@@ -1,7 +1,10 @@
+import cors from 'cors'
 import express from 'express'
 import { createRoom, Room } from './createRoom'
 
 const app = express()
+app.use(cors())
+app.use(express.json())
 
 const rooms: Room[] = []
 
@@ -9,23 +12,32 @@ const rooms: Room[] = []
 rooms.push(createRoom())
 
 app.get('/list-rooms', (request, response) => {
-	response.send({
+	response.json({
 		rooms: rooms.map((room) => ({
 			id: room.id,
 			maximumPlayers: room.maximumPlayers,
 			width: room.width,
 			height: room.height,
+			state: room.state,
 		})),
 	})
 })
 app.post('/create-room', (request, response) => {
-	response.send('Ok')
+	response.json({})
 })
 app.get('/room/:id', (request, response) => {
-	response.send('Ok')
+	response.json({})
 })
 app.post('/room/:id', (request, response) => {
-	response.send('Ok')
+	const room = rooms.find((room) => room.id === request.params.id)
+	console.log(request.body)
+	response.json({
+		id: room.id,
+		maximumPlayers: room.maximumPlayers,
+		width: room.width,
+		height: room.height,
+		state: room.state,
+	})
 })
 
 app.use(express.static('public'))
