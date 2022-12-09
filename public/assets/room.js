@@ -26,9 +26,9 @@ const loop = async () => {
 	} = await response.json()
 	board.width = width * fieldSize
 	board.height = height * fieldSize
-	players.forEach(({ fromHeadPosition }) => {
+	players.forEach(({ isAlive, fromHeadPosition }) => {
 		fromHeadPosition.forEach(({ x, y }) => {
-			context.fillStyle = 'red'
+			context.fillStyle = isAlive ? 'red' : 'gray'
 			context.fillRect(
 				x * fieldSize + gapSize / 2,
 				y * fieldSize + gapSize / 2,
@@ -38,8 +38,6 @@ const loop = async () => {
 		})
 	})
 
-	// @TODO: remove delay
-	await new Promise((resolve) => setTimeout(resolve, 1000))
 	await loop()
 }
 loop()

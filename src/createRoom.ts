@@ -37,10 +37,9 @@ export const createRoom = (width = 10, height = 10, maximumPlayers = 4) => {
 				const headPosition = player.fromHeadPosition[0]
 				const neckPosition = player.fromHeadPosition[1]
 				const lastDirection = {
-					x: neckPosition.x - headPosition.x,
-					y: neckPosition.y - headPosition.y,
+					x: headPosition.x - neckPosition.x,
+					y: headPosition.y - neckPosition.y,
 				}
-
 				const nextPosition =
 					actionName === 'forward'
 						? {
@@ -70,9 +69,10 @@ export const createRoom = (width = 10, height = 10, maximumPlayers = 4) => {
 					headPosition.x >= width ||
 					headPosition.y < 0 ||
 					headPosition.y >= height
-				const isCollidingWithABody = players.some((player) =>
-					player.fromHeadPosition.some(
-						(playerPosition) =>
+				const isCollidingWithABody = players.some((otherPlayer) =>
+					otherPlayer.fromHeadPosition.some(
+						(playerPosition, i) =>
+							(otherPlayer.player.id !== player.player.id || i !== 0) &&
 							playerPosition.x === headPosition.x &&
 							playerPosition.y === headPosition.y,
 					),
@@ -117,8 +117,8 @@ export const createRoom = (width = 10, height = 10, maximumPlayers = 4) => {
 				const playerWithAction: PlayingPlayer = {
 					isAlive: true,
 					fromHeadPosition: [
-						{ x: 1, y: 0 },
-						{ x: 0, y: 0 },
+						{ x: 2, y: 1 },
+						{ x: 1, y: 1 },
 					],
 					pendingAction: null,
 					player,
