@@ -36,7 +36,8 @@ const loop = async () => {
 	})
 	const data = await response.json()
 	console.log(data)
-	// @TODO: uncomment this line
-	// await loop()
+	// @TODO: remove delay
+	await new Promise((resolve) => setTimeout(resolve, 1000))
+	await loop()
 }
 loop()

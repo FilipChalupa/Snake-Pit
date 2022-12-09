@@ -39,9 +39,10 @@ const getRoomState = (room: Room) => ({
 	width: room.width,
 	height: room.height,
 	state: room.state,
+	timeInTicks: room.getTimeInTicks(),
 })
 
-app.get('/room/:id', (request, response) => {
+app.get('/room/:id', async (request, response) => {
 	const room = rooms.find((room) => room.id === request.params.id)
 	if (!room) {
 		response.status(400).json({
@@ -49,11 +50,15 @@ app.get('/room/:id', (request, response) => {
 		})
 		return
 	}
-	return {
-		room: getRoomState(room),
+	const immediate = request.query.immediate !== undefined
+	if (!immediate) {
+		await room.observeNextTick()
 	}
+	response.json({
+		room: getRoomState(room),
+	})
 })
-app.post('/room/:id', (request, response) => {
+app.post('/room/:id', async (request, response) => {
 	const room = rooms.find((room) => room.id === request.params.id)
 	if (!room) {
 		response.status(400).json({
@@ -70,7 +75,7 @@ app.post('/room/:id', (request, response) => {
 		})
 		return
 	}
-	// @TODO: check if player is already in room, enough space
+	await room.performAction(player, request.body.action)
 	response.json({ room: getRoomState(room) })
 })
 
