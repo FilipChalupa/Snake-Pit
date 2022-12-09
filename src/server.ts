@@ -85,7 +85,7 @@ app.post('/room/:id', async (request, response) => {
 		return
 	}
 	await room.performAction(player, request.body.action)
-	response.json({ room: getRoomState(room) })
+	response.json({ room: getRoomState(room), yourPlayerId: player.id })
 })
 
 app.use(express.static('public'))
