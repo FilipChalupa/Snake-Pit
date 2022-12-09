@@ -20,7 +20,7 @@ app.get('/list-rooms', (request, response) => {
 	response.json({
 		rooms: rooms.map((room) => ({
 			id: room.id,
-			connectedPlayers: room.players.length,
+			joinedPlayers: room.players.length,
 			maximumPlayers: room.maximumPlayers,
 			width: room.width,
 			height: room.height,
