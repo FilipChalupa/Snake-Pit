@@ -17,8 +17,8 @@ if (!id) {
 	location.href = '/'
 }
 
-const field = document.querySelector('#field')
-field.src = `/room/?id=${id}`
+const board = document.querySelector('#field')
+board.src = `/room/?id=${id}`
 
 const playerToken = 'anonymous'
 

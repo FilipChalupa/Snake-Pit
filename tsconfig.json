@@ -1,7 +1,9 @@
 {
 	"compilerOptions": {
 		"module": "Node16",
-		"outDir": "dist"
+		"outDir": "dist",
+		"noImplicitAny": true,
+		"strictNullChecks": true
 	},
 	"include": ["src"],
 	"exclude": ["node_modules"]

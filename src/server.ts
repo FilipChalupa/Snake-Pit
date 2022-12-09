@@ -33,14 +33,22 @@ app.post('/create-room', (request, response) => {
 		error: 'Not implemented.',
 	})
 })
-const getRoomState = (room: Room) => ({
-	id: room.id,
-	maximumPlayers: room.maximumPlayers,
-	width: room.width,
-	height: room.height,
-	state: room.state,
-	timeInTicks: room.getTimeInTicks(),
-})
+const getRoomState = (room: Room) => {
+	const players = room.players.map((player) => ({
+		id: player.player.id,
+		isAlive: player.isAlive,
+		fromHeadPosition: player.fromHeadPosition,
+	}))
+	return {
+		id: room.id,
+		maximumPlayers: room.maximumPlayers,
+		width: room.width,
+		height: room.height,
+		state: room.state,
+		timeInTicks: room.getTimeInTicks(),
+		players,
+	} as const
+}
 
 app.get('/room/:id', async (request, response) => {
 	const room = rooms.find((room) => room.id === request.params.id)

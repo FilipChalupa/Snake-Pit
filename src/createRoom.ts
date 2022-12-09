@@ -1,36 +1,92 @@
 import { Player } from './createPlayer'
 import { generateId } from './generateId'
+import { assertNever } from './utilities/assertNever'
 
 const allowedActions = ['forward', 'left', 'right'] as const
 type ActionName = typeof allowedActions[number]
-type PlayerWithAction = {
+type Position = { x: number; y: number }
+type PlayingPlayer = {
 	pendingAction: {
 		name: ActionName
 		onTick: () => void
 		onRejected: () => void
 	} | null
 	player: Player
+	isAlive: boolean
+	fromHeadPosition: Position[]
 }
 type PendingObservation = {
 	onTick: () => void
 }
 
-export const createRoom = () => {
+export const createRoom = (width = 10, height = 10, maximumPlayers = 4) => {
 	// @TODO: remove fixed id
 	const id = generateId() && 'fixed-room-id'
-	const width = 10
-	const height = 10
-	const maximumPlayers = 4
 	const state: 'waitingForOtherPlayers' | 'playing' = 'waitingForOtherPlayers'
-	const players: PlayerWithAction[] = []
+	const players: PlayingPlayer[] = []
+	// @TODO: food
 	let pendingNextTickObservations: PendingObservation[] = []
 	let timeInTicks = 0
 
 	const performActions = () => {
 		timeInTicks++
-		console.log('performing all actions')
+		// @TODO: handle game state waitingForOtherPlayers
 		players.forEach((player) => {
-			player.pendingAction.onTick()
+			if (player.isAlive) {
+				const actionName = player.pendingAction?.name ?? 'forward'
+				const headPosition = player.fromHeadPosition[0]
+				const neckPosition = player.fromHeadPosition[1]
+				const lastDirection = {
+					x: neckPosition.x - headPosition.x,
+					y: neckPosition.y - headPosition.y,
+				}
+
+				const nextPosition =
+					actionName === 'forward'
+						? {
+								x: headPosition.x + lastDirection.x,
+								y: headPosition.y + lastDirection.y,
+						  }
+						: actionName === 'left'
+						? {
+								x: headPosition.x + lastDirection.y,
+								y: headPosition.y - lastDirection.x,
+						  }
+						: actionName === 'right'
+						? {
+								x: headPosition.x - lastDirection.y,
+								y: headPosition.y + lastDirection.x,
+						  }
+						: assertNever(actionName)
+				player.fromHeadPosition.unshift(nextPosition)
+			}
+		})
+		players.forEach((player) => {
+			if (player.isAlive) {
+				// Check collision
+				const headPosition = player.fromHeadPosition[0]
+				const isOutside =
+					headPosition.x < 0 ||
+					headPosition.x >= width ||
+					headPosition.y < 0 ||
+					headPosition.y >= height
+				const isCollidingWithABody = players.some((player) =>
+					player.fromHeadPosition.some(
+						(playerPosition) =>
+							playerPosition.x === headPosition.x &&
+							playerPosition.y === headPosition.y,
+					),
+				)
+				if (isOutside || isCollidingWithABody) {
+					player.isAlive = false
+					player.fromHeadPosition.shift()
+				} else {
+					player.fromHeadPosition.pop()
+				}
+			}
+		})
+		players.forEach((player) => {
+			player.pendingAction?.onTick()
 			player.pendingAction = null
 		})
 		pendingNextTickObservations.forEach((pendingObservation) => {
@@ -58,7 +114,12 @@ export const createRoom = () => {
 				return playerWithAction
 			}
 			if (players.length <= maximumPlayers) {
-				const playerWithAction: PlayerWithAction = {
+				const playerWithAction: PlayingPlayer = {
+					isAlive: true,
+					fromHeadPosition: [
+						{ x: 1, y: 0 },
+						{ x: 0, y: 0 },
+					],
 					pendingAction: null,
 					player,
 				}
@@ -105,7 +166,7 @@ export const createRoom = () => {
 		performAction,
 		getTimeInTicks,
 		observeNextTick,
-	}
+	} as const
 }
 
 export type Room = ReturnType<typeof createRoom>
