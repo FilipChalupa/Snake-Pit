@@ -7,7 +7,7 @@ const refresh = async () => {
 		.map(
 			(room) => /* html */ `
 				<li>
-					<a href="/room/?id=${room.id}">${room.id}</a>
+					<h3><a href="/room/?id=${room.id}">${room.id}</a></h3>
 					<dl>
 						<dt>State</dt>
 						<dd>${room.state /* @TODO: translate */}</dd>
