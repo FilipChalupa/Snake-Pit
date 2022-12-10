@@ -237,7 +237,11 @@ export const createRoom = (
 					reject(new Error('Pending action was ovverriden.'))
 				},
 			}
-			if (players.every((player) => player.pendingAction !== null)) {
+			if (
+				players.every(
+					(player) => player.pendingAction !== null || player.isAlive === false,
+				)
+			) {
 				performActions()
 			}
 		})
