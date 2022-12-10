@@ -85,6 +85,11 @@ const loop = async (action) => {
 				obstacles[-1][i] = true
 				obstacles[width][i] = true
 			}
+			players.forEach((otherPlayer) => {
+				otherPlayer.fromHeadPosition.forEach(({ x, y }) => {
+					obstacles[x][y] = true
+				})
+			})
 			return (x, y) => obstacles[x]?.[y] ?? false
 		})()
 		const headPosition = player.fromHeadPosition[0]
