@@ -37,6 +37,7 @@ app.post('/create-room', (request, response) => {
 const getPlayerInformation = (player: Player) => ({
 	id: player.id,
 	color: player.color,
+	name: player.name,
 })
 app.post('/create-player', (request, response) => {
 	const name = (() => {
@@ -73,6 +74,7 @@ const getRoomState = (room: Room) => {
 		id: player.player.id,
 		isAlive: player.isAlive,
 		color: player.player.color,
+		name: player.player.name,
 		fromHeadPosition: player.fromHeadPosition,
 	}))
 	return {
