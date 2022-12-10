@@ -51,6 +51,7 @@ export const createRoom = (
 	const performActions = () => {
 		timeInTicks++
 		// @TODO: handle game state waitingForOtherPlayers
+		const foodIndexesToBeEaten: number[] = []
 		players.forEach((player) => {
 			if (player.isAlive) {
 				const actionName = player.pendingAction?.name ?? 'forward'
@@ -84,6 +85,21 @@ export const createRoom = (
 			if (player.isAlive) {
 				// Check collision
 				const headPosition = player.fromHeadPosition[0]
+
+				// Eat food
+				const isEatingFood = (() => {
+					const foodIndexAtHeadPosition = food.findIndex(
+						(food) =>
+							food.position.x === headPosition.x &&
+							food.position.y === headPosition.y,
+					)
+					if (foodIndexAtHeadPosition >= 0) {
+						foodIndexesToBeEaten.push(foodIndexAtHeadPosition)
+						return true
+					}
+					return false
+				})()
+
 				const isOutside =
 					headPosition.x < 0 ||
 					headPosition.x >= width ||
@@ -101,10 +117,13 @@ export const createRoom = (
 					player.isAlive = false
 					player.fromHeadPosition.shift()
 				} else {
-					player.fromHeadPosition.pop()
+					if (!isEatingFood) {
+						player.fromHeadPosition.pop()
+					}
 				}
 			}
 		})
+		food = food.filter((_, i) => !foodIndexesToBeEaten.includes(i))
 		placeFood()
 		players.forEach((player) => {
 			player.pendingAction?.onTick()
