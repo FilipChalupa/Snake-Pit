@@ -5,9 +5,7 @@ const id = await (async () => {
 	}
 	const response = await fetch('/list-rooms')
 	const data = await response.json()
-	const room = data.rooms.find(
-		(room) => room.state === 'waitingForOtherPlayers',
-	)
+	const room = data.rooms.find((room) => room.state === 'waiting')
 	if (room) {
 		return room.id
 	}
