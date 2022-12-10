@@ -1,14 +1,23 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
 :root {
+	--page-gap: 1rem;
 	font-family: sans-serif;
 }
 
 body {
 	max-width: 40rem;
-	margin-inline: auto;
-	padding-inline: 1rem;
+	margin: 0 auto;
+	padding: var(--page-gap);
 }
 
 .board {
-	width: 100%;
+	width: calc(100% + 2 * var(--page-gap));
+	margin-inline: calc(-1 * var(--page-gap));
 	image-rendering: pixelated;
+	border: 0.0625rem solid;
 }

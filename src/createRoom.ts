@@ -18,14 +18,34 @@ type PlayingPlayer = {
 type PendingObservation = {
 	onTick: () => void
 }
+type Food = {
+	position: Position
+}
 
-export const createRoom = (width = 32, height = 18, maximumPlayers = 4) => {
+export const createRoom = (
+	width = 32,
+	height = 18,
+	maximumPlayers = 4,
+	maximumFood = 10,
+) => {
 	const id = generateId()
 	const state: 'waitingForOtherPlayers' | 'playing' = 'waitingForOtherPlayers'
 	const players: PlayingPlayer[] = []
-	// @TODO: food
+	let food: Food[] = []
 	let pendingNextTickObservations: PendingObservation[] = []
 	let timeInTicks = 0
+
+	const placeFood = () => {
+		if (food.length === maximumFood) {
+			return
+		}
+		food.push({
+			position: {
+				x: Math.floor(Math.random() * width),
+				y: Math.floor(Math.random() * height),
+			},
+		})
+	}
 
 	const performActions = () => {
 		timeInTicks++
@@ -84,6 +104,7 @@ export const createRoom = (width = 32, height = 18, maximumPlayers = 4) => {
 				}
 			}
 		})
+		placeFood()
 		players.forEach((player) => {
 			player.pendingAction?.onTick()
 			player.pendingAction = null
@@ -161,10 +182,11 @@ export const createRoom = (width = 32, height = 18, maximumPlayers = 4) => {
 		height,
 		maximumPlayers,
 		state,
-		players,
+		getPlayers: () => players,
 		performAction,
 		getTimeInTicks,
 		observeNextTick,
+		getFood: () => food,
 	} as const
 }
 

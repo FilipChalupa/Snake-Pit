@@ -20,7 +20,7 @@ app.get('/list-rooms', (request, response) => {
 	response.json({
 		rooms: rooms.map((room) => ({
 			id: room.id,
-			joinedPlayers: room.players.length,
+			joinedPlayers: room.getPlayers().length,
 			maximumPlayers: room.maximumPlayers,
 			width: room.width,
 			height: room.height,
@@ -34,7 +34,7 @@ app.post('/create-room', (request, response) => {
 	})
 })
 const getRoomState = (room: Room) => {
-	const players = room.players.map((player) => ({
+	const players = room.getPlayers().map((player) => ({
 		id: player.player.id,
 		isAlive: player.isAlive,
 		color: player.player.color,
@@ -48,6 +48,7 @@ const getRoomState = (room: Room) => {
 		state: room.state,
 		timeInTicks: room.getTimeInTicks(),
 		players,
+		food: room.getFood(),
 	} as const
 }
 
