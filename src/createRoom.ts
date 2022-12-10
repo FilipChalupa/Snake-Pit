@@ -25,7 +25,7 @@ type Food = {
 export const createRoom = (
 	width = 32,
 	height = 18,
-	maximumPlayers = 4,
+	maximumPlayers = 2,
 	maximumFood = 10,
 ) => {
 	const id = generateId()
@@ -213,7 +213,7 @@ export const createRoom = (
 					reject(new Error('Pending action was ovverriden.'))
 				},
 			}
-			if (true || players.every((player) => player.pendingAction !== null)) {
+			if (players.every((player) => player.pendingAction !== null)) {
 				performActions()
 			}
 		})
