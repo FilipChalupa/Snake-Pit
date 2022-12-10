@@ -1,3 +1,5 @@
+import { renderBoard } from './renderBoard.js'
+
 const storageTokenKey = 'token'
 const playerToken = await (async () => {
 	const tokenFromStorage = localStorage.getItem(storageTokenKey)
@@ -51,8 +53,7 @@ if (!id) {
 	location.href = '/'
 }
 
-const board = document.querySelector('#field')
-board.src = `/room/?id=${id}`
+renderBoard(id)
 
 const loop = async (action) => {
 	const payload = {
