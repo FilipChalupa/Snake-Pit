@@ -30,7 +30,22 @@ app.get('/list-rooms', (request, response) => {
 	})
 })
 app.post('/create-room', (request, response) => {
-	const room = roomsManager.createRoom(/*10, 10, 1*/)
+	const readNumber = (key: string, min: number, max: number) => {
+		if (typeof request.body[key] === 'number') {
+			return Math.min(max, Math.max(min, request.body[key]))
+		}
+		return min + Math.floor(Math.random() * (max - min))
+	}
+	const width = readNumber('width', 10, 100)
+	const height = readNumber('height', 10, 100)
+	const maximumPlayers = readNumber('maximumPlayers', 1, 10)
+	const maximumFood = readNumber('maximumFood', 1, 100)
+	const room = roomsManager.createRoom(
+		width,
+		height,
+		maximumPlayers,
+		maximumFood,
+	)
 	response.json({ room: getRoomState(room) })
 })
 const getPlayerInformation = (player: Player) => ({
