@@ -24,7 +24,7 @@ app.get('/list-rooms', (request, response) => {
 			maximumPlayers: room.maximumPlayers,
 			width: room.width,
 			height: room.height,
-			state: room.state,
+			state: room.getState(),
 		})),
 	})
 })
@@ -45,7 +45,7 @@ const getRoomState = (room: Room) => {
 		maximumPlayers: room.maximumPlayers,
 		width: room.width,
 		height: room.height,
-		state: room.state,
+		state: room.getState(),
 		timeInTicks: room.getTimeInTicks(),
 		players,
 		food: room.getFood(),

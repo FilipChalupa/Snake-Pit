@@ -29,7 +29,7 @@ export const createRoom = (
 	maximumFood = 10,
 ) => {
 	const id = generateId()
-	const state: 'waiting' | 'playing' | 'ended' = 'waiting'
+	let state: 'waiting' | 'playing' | 'ended' = 'waiting'
 	const players: PlayingPlayer[] = []
 	let food: Food[] = []
 	let pendingNextTickObservations: PendingObservation[] = []
@@ -48,83 +48,104 @@ export const createRoom = (
 		})
 	}
 
+	const checkAllReady = () => {
+		if (state !== 'waiting') {
+			return
+		}
+		if (players.length === maximumPlayers) {
+			state = 'playing'
+		}
+	}
+
+	const checkAllDied = () => {
+		if (state !== 'playing') {
+			return
+		}
+		const allDead = players.every((player) => !player.isAlive)
+		if (allDead) {
+			state = 'ended'
+		}
+	}
+
 	const performActions = () => {
 		timeInTicks++
-		// @TODO: handle game state waitingForOtherPlayers
-		const foodIndexesToBeEaten: number[] = []
-		players.forEach((player) => {
-			if (player.isAlive) {
-				const actionName = player.pendingAction?.name ?? 'forward'
-				const headPosition = player.fromHeadPosition[0]
-				const neckPosition = player.fromHeadPosition[1]
-				const lastDirection = {
-					x: headPosition.x - neckPosition.x,
-					y: headPosition.y - neckPosition.y,
+		if (state === 'playing') {
+			const foodIndexesToBeEaten: number[] = []
+			players.forEach((player) => {
+				if (player.isAlive) {
+					const actionName = player.pendingAction?.name ?? 'forward'
+					const headPosition = player.fromHeadPosition[0]
+					const neckPosition = player.fromHeadPosition[1]
+					const lastDirection = {
+						x: headPosition.x - neckPosition.x,
+						y: headPosition.y - neckPosition.y,
+					}
+					const nextPosition =
+						actionName === 'forward'
+							? {
+									x: headPosition.x + lastDirection.x,
+									y: headPosition.y + lastDirection.y,
+							  }
+							: actionName === 'left'
+							? {
+									x: headPosition.x + lastDirection.y,
+									y: headPosition.y - lastDirection.x,
+							  }
+							: actionName === 'right'
+							? {
+									x: headPosition.x - lastDirection.y,
+									y: headPosition.y + lastDirection.x,
+							  }
+							: assertNever(actionName)
+					player.fromHeadPosition.unshift(nextPosition)
 				}
-				const nextPosition =
-					actionName === 'forward'
-						? {
-								x: headPosition.x + lastDirection.x,
-								y: headPosition.y + lastDirection.y,
-						  }
-						: actionName === 'left'
-						? {
-								x: headPosition.x + lastDirection.y,
-								y: headPosition.y - lastDirection.x,
-						  }
-						: actionName === 'right'
-						? {
-								x: headPosition.x - lastDirection.y,
-								y: headPosition.y + lastDirection.x,
-						  }
-						: assertNever(actionName)
-				player.fromHeadPosition.unshift(nextPosition)
-			}
-		})
-		players.forEach((player) => {
-			if (player.isAlive) {
-				// Check collision
-				const headPosition = player.fromHeadPosition[0]
+			})
+			players.forEach((player) => {
+				if (player.isAlive) {
+					// Check collision
+					const headPosition = player.fromHeadPosition[0]
 
-				// Eat food
-				const isEatingFood = (() => {
-					const foodIndexAtHeadPosition = food.findIndex(
-						(food) =>
-							food.position.x === headPosition.x &&
-							food.position.y === headPosition.y,
+					// Eat food
+					const isEatingFood = (() => {
+						const foodIndexAtHeadPosition = food.findIndex(
+							(food) =>
+								food.position.x === headPosition.x &&
+								food.position.y === headPosition.y,
+						)
+						if (foodIndexAtHeadPosition >= 0) {
+							foodIndexesToBeEaten.push(foodIndexAtHeadPosition)
+							return true
+						}
+						return false
+					})()
+
+					const isOutside =
+						headPosition.x < 0 ||
+						headPosition.x >= width ||
+						headPosition.y < 0 ||
+						headPosition.y >= height
+					const isCollidingWithABody = players.some((otherPlayer) =>
+						otherPlayer.fromHeadPosition.some(
+							(playerPosition, i) =>
+								(otherPlayer.player.id !== player.player.id || i !== 0) &&
+								playerPosition.x === headPosition.x &&
+								playerPosition.y === headPosition.y,
+						),
 					)
-					if (foodIndexAtHeadPosition >= 0) {
-						foodIndexesToBeEaten.push(foodIndexAtHeadPosition)
-						return true
-					}
-					return false
-				})()
-
-				const isOutside =
-					headPosition.x < 0 ||
-					headPosition.x >= width ||
-					headPosition.y < 0 ||
-					headPosition.y >= height
-				const isCollidingWithABody = players.some((otherPlayer) =>
-					otherPlayer.fromHeadPosition.some(
-						(playerPosition, i) =>
-							(otherPlayer.player.id !== player.player.id || i !== 0) &&
-							playerPosition.x === headPosition.x &&
-							playerPosition.y === headPosition.y,
-					),
-				)
-				if (isOutside || isCollidingWithABody) {
-					player.isAlive = false
-					player.fromHeadPosition.shift()
-				} else {
-					if (!isEatingFood) {
-						player.fromHeadPosition.pop()
+					if (isOutside || isCollidingWithABody) {
+						player.isAlive = false
+						player.fromHeadPosition.shift()
+					} else {
+						if (!isEatingFood) {
+							player.fromHeadPosition.pop()
+						}
 					}
 				}
-			}
-		})
-		food = food.filter((_, i) => !foodIndexesToBeEaten.includes(i))
+			})
+			food = food.filter((_, i) => !foodIndexesToBeEaten.includes(i))
+		}
 		placeFood()
+		checkAllDied()
 		players.forEach((player) => {
 			player.pendingAction?.onTick()
 			player.pendingAction = null
@@ -170,6 +191,7 @@ export const createRoom = (
 				throw new Error('Room is full.')
 			}
 		})()
+		checkAllReady()
 		if (!allowedActions.includes(action as ActionName)) {
 			// @TODO
 			throw new Error('Invalid action.')
@@ -201,7 +223,7 @@ export const createRoom = (
 		width,
 		height,
 		maximumPlayers,
-		state,
+		getState: () => state,
 		getPlayers: () => players,
 		performAction,
 		getTimeInTicks,
