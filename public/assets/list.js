@@ -8,6 +8,7 @@ const refresh = async () => {
 			(room) => /* html */ `
 				<li>
 					<h3><a href="/room/?id=${room.id}">${room.id}</a></h3>
+					<small><a href="/demo-bot/?id=${room.id}">Join as demo bot</a></small>
 					<dl>
 						<dt>State</dt>
 						<dd>${room.state /* @TODO: translate */}</dd>
