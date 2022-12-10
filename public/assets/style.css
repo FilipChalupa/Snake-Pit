@@ -25,3 +25,9 @@ body {
 code span {
 	font-style: italic;
 }
+
+dl {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 0.2em 0.5em;
+}
