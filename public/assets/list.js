@@ -18,8 +18,8 @@ const refresh = async () => {
 					<h3><a href="/room/?id=${room.id}">${room.id}</a></h3>
 					<small><a href="/demo-bot/?id=${room.id}">Join as demo bot</a></small>
 					<dl>
-						<dt>State</dt>
-						<dd>${room.state /* @TODO: translate */}</dd>
+						<dt>Status</dt>
+						<dd>${room.status /* @TODO: translate */}</dd>
 						<dt>Joined players</dt>
 						<dd>${
 							room.joinedPlayers.length === 0

@@ -21,21 +21,21 @@ type PendingObservation = {
 type Food = {
 	position: Position
 }
-type State = 'waiting' | 'playing' | 'ended'
+type Status = 'waiting' | 'playing' | 'ended'
 
 const maximumTimeToAction = 1000
 const maximumIdleTime = 60000
 
 export const createRoom = (
 	onRoomAbandoned = () => {},
-	onRoomStateChanged = () => {},
+	onRoomStatusChanged = () => {},
 	width = 32,
 	height = 18,
 	maximumPlayers = 2,
 	maximumFood = 10,
 ) => {
 	const id = generateId()
-	let state: State = 'waiting'
+	let status: Status = 'waiting'
 	const players: PlayingPlayer[] = []
 	let food: Food[] = []
 	let pendingNextTickObservations: PendingObservation[] = []
@@ -43,9 +43,9 @@ export const createRoom = (
 	let timeoutPerform: ReturnType<typeof setTimeout>
 	let timeoutIdle: ReturnType<typeof setTimeout>
 
-	const changeState = (newState: State) => {
-		state = newState
-		onRoomStateChanged()
+	const changeStatus = (newStatus: Status) => {
+		status = newStatus
+		onRoomStatusChanged()
 	}
 
 	const restartMaximumIdleTimeCheck = () => {
@@ -69,28 +69,28 @@ export const createRoom = (
 	}
 
 	const checkAllReady = () => {
-		if (state !== 'waiting') {
+		if (status !== 'waiting') {
 			return
 		}
 		if (players.length === maximumPlayers) {
-			changeState('playing')
+			changeStatus('playing')
 		}
 	}
 
 	const checkAllDied = () => {
-		if (state !== 'playing') {
+		if (status !== 'playing') {
 			return
 		}
 		const allDead = players.every((player) => !player.isAlive)
 		if (allDead) {
-			changeState('ended')
+			changeStatus('ended')
 		}
 	}
 
 	const performActions = () => {
 		clearTimeout(timeoutPerform)
 		timeInTicks++
-		if (state === 'playing') {
+		if (status === 'playing') {
 			const foodIndexesToBeEaten: number[] = []
 			players.forEach((player) => {
 				if (player.isAlive) {
@@ -248,7 +248,7 @@ export const createRoom = (
 		width,
 		height,
 		maximumPlayers,
-		getState: () => state,
+		getStatus: () => status,
 		getPlayers: () => players,
 		performAction,
 		getTimeInTicks,

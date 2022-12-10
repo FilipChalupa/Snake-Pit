@@ -64,7 +64,7 @@ GET /room/<span>:id</span>?immediate
 		</code></pre>
 		<p>
 			Use <code><span>immediate</span></code> get parameter to skip waiting for
-			next server tick. This may be useful for getting an initial room state.
+			next server tick. This may be useful for getting an initial room status.
 		</p>
 
 		<h3>Player info</h3>
@@ -105,7 +105,7 @@ const { playerToken } = await createPlayerResponse.json()
 // Find room to join
 const listRoomsResponse = await fetch('/list-rooms')
 const { rooms } = await listRoomsResponse.json()
-const room = rooms.find((room) => room.state === 'waiting')
+const room = rooms.find((room) => room.status === 'waiting')
 
 // Keep going forward
 while (true) {

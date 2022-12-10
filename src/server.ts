@@ -27,7 +27,7 @@ app.get('/list-rooms', (request, response) => {
 			maximumPlayers: room.maximumPlayers,
 			width: room.width,
 			height: room.height,
-			state: room.getState(),
+			status: room.getStatus(),
 		})),
 	})
 })
@@ -48,7 +48,7 @@ app.post('/create-room', (request, response) => {
 		maximumPlayers,
 		maximumFood,
 	)
-	response.json({ room: getRoomState(room) })
+	response.json({ room: getRoomStatus(room) })
 })
 const getPlayerInformation = (player: Player) => ({
 	id: player.id,
@@ -85,7 +85,7 @@ app.post('/me', (request, response) => {
 		player: getPlayerInformation(player),
 	})
 })
-const getRoomState = (room: Room) => {
+const getRoomStatus = (room: Room) => {
 	const players = room.getPlayers().map((player) => ({
 		id: player.player.id,
 		isAlive: player.isAlive,
@@ -98,7 +98,7 @@ const getRoomState = (room: Room) => {
 		maximumPlayers: room.maximumPlayers,
 		width: room.width,
 		height: room.height,
-		state: room.getState(),
+		status: room.getStatus(),
 		timeInTicks: room.getTimeInTicks(),
 		players,
 		food: room.getFood(),
@@ -118,7 +118,7 @@ app.get('/room/:id', async (request, response) => {
 		await room.observeNextTick()
 	}
 	response.json({
-		room: getRoomState(room),
+		room: getRoomStatus(room),
 	})
 })
 app.post('/room/:id', async (request, response) => {
@@ -139,7 +139,7 @@ app.post('/room/:id', async (request, response) => {
 		return
 	}
 	await room.performAction(player, request.body.action)
-	response.json({ room: getRoomState(room), yourPlayerId: player.id })
+	response.json({ room: getRoomStatus(room), yourPlayerId: player.id })
 })
 
 app.use(express.static('public'))
