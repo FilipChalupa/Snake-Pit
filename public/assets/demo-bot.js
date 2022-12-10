@@ -69,7 +69,6 @@ const loop = async (action) => {
 	const player = players.find((otherPlayer) => otherPlayer.id === yourPlayerId)
 	let nextAction = 'forward'
 	if (player?.isAlive) {
-		console.log('plan')
 		const headPosition = player.fromHeadPosition[0]
 		const neckPosition = player.fromHeadPosition[1]
 		const direction = {
