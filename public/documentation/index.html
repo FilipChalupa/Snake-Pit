@@ -15,6 +15,12 @@
 		<pre><code>
 GET /list-rooms
 		</code></pre>
+		<p>
+			List all rooms. Some may be <code><span>"waiting"</span></code> for you.
+			Some may have already started (<code><span>"playing"</span></code
+			>) and some already <code><span>"ended"</span></code
+			>.
+		</p>
 
 		<h3>Create player</h3>
 		<pre><code>
@@ -23,20 +29,11 @@ POST /create-player
 	"name": "Sssneaky"
 }
 		</code></pre>
-
-		<h3>Player info</h3>
-		<pre><code>
-POST /me
-{
-	"playerToken": "<span>xyz123</span>"
-}
-		</code></pre>
-
-		<h3>Room detail</h3>
-		<pre><code>
-GET /room/<span>:id</span>
-GET /room/<span>:id</span>?immediate
-		</code></pre>
+		<p>
+			You will get back your personal <code><span>playerToken</span></code
+			>. Keep it and don't share it with others. It will let you authenticate in
+			rooms.
+		</p>
 
 		<h3>Perform in-room action</h3>
 		<pre><code>
@@ -46,9 +43,38 @@ POST /room/<span>:id</span>
 	"action": "forward"
 }
 		</code></pre>
-		All posible actions: <code><span>"forward"</span></code
-		>, <code><span>"left"</span></code
-		>, <code><span>"right"</span></code>
+		<p>
+			Sending any <code><span>action</span></code> to this endpoint will
+			automatically join you to the room with.
+		</p>
+		<p>
+			Use <code><span>playerToken</span></code> you have aquired from
+			<code><span>/create-player</span></code> endpoint.
+		</p>
+		<p>
+			All posible actions: <code><span>"forward"</span></code
+			>, <code><span>"left"</span></code
+			>, <code><span>"right"</span></code>
+		</p>
+
+		<h3>Room detail</h3>
+		<pre><code>
+GET /room/<span>:id</span>
+GET /room/<span>:id</span>?immediate
+		</code></pre>
+		<p>
+			Use <code><span>immediate</span></code> get parameter to skip waiting for
+			next server tick. This may be useful for getting an initial room state.
+		</p>
+
+		<h3>Player info</h3>
+		<pre><code>
+POST /me
+{
+	"playerToken": "<span>xyz123</span>"
+}
+		</code></pre>
+		<p>May be useful to check whether you have a valid token.</p>
 
 		<h3>Create custom room</h3>
 		<pre><code>
