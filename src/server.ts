@@ -1,7 +1,8 @@
 import cors from 'cors'
 import express from 'express'
 import { createPlayer, Player } from './createPlayer'
-import { createRoom, Room } from './createRoom'
+import { Room } from './createRoom'
+import { createRoomsManager } from './createRoomsManager'
 import { generateToken } from './utilities/generateToken'
 
 const port = process.env.PORT || 3000
@@ -10,44 +11,27 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-const rooms: Room[] = []
+const roomsManager = createRoomsManager()
 const players: Player[] = []
 
 players.push(createPlayer('anonymous', 'Anonymous'))
 // @TODO: remove
-rooms.push(createRoom())
+roomsManager.createRoom()
 
 app.get('/list-rooms', (request, response) => {
 	response.json({
-		rooms: rooms
-			.map((room) => ({
-				id: room.id,
-				joinedPlayers: room.getPlayers().length,
-				maximumPlayers: room.maximumPlayers,
-				width: room.width,
-				height: room.height,
-				state: room.getState(),
-			}))
-			.sort((a, b) => {
-				if (a.state === b.state) {
-					return 0
-				}
-				if (a.state === 'waiting') {
-					return -1
-				}
-				if (b.state === 'waiting') {
-					return 1
-				}
-				if (a.state === 'playing') {
-					return -1
-				}
-				return 1
-			}),
+		rooms: roomsManager.getRooms().map((room) => ({
+			id: room.id,
+			joinedPlayers: room.getPlayers().length,
+			maximumPlayers: room.maximumPlayers,
+			width: room.width,
+			height: room.height,
+			state: room.getState(),
+		})),
 	})
 })
 app.post('/create-room', (request, response) => {
-	const room = createRoom(10, 10, 1)
-	rooms.push(room)
+	const room = roomsManager.createRoom(/*10, 10, 1*/)
 	response.json({ room: getRoomState(room) })
 })
 const getPlayerInformation = (player: Player) => ({
@@ -106,7 +90,7 @@ const getRoomState = (room: Room) => {
 }
 
 app.get('/room/:id', async (request, response) => {
-	const room = rooms.find((room) => room.id === request.params.id)
+	const room = roomsManager.findRoom(request.params.id)
 	if (!room) {
 		response.status(400).json({
 			error: 'Room not found.',
@@ -122,7 +106,7 @@ app.get('/room/:id', async (request, response) => {
 	})
 })
 app.post('/room/:id', async (request, response) => {
-	const room = rooms.find((room) => room.id === request.params.id)
+	const room = roomsManager.findRoom(request.params.id)
 	if (!room) {
 		response.status(400).json({
 			error: 'Room not found.',
