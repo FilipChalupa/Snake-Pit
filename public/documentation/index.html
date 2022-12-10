@@ -86,5 +86,43 @@ POST /create-room
 	"maximumFood": 1
 }
 		</code></pre>
+
+		<h2>Very naive example</h2>
+		<code>
+			<pre>
+// Create player
+const createPlayerResponse = await fetch('/create-player', {
+	method: 'POST',
+	headers: {
+		'Content-Type': 'application/json',
+	},
+	body: JSON.stringify({
+		name: 'Testing bot',
+	}),
+})
+const { playerToken } = await createPlayerResponse.json()
+
+// Find room to join
+const listRoomsResponse = await fetch('/list-rooms')
+const { rooms } = await listRoomsResponse.json()
+const room = rooms.find((room) => room.state === 'waiting')
+
+// Keep going forward
+while (true) {
+	const payload = {
+		playerToken,
+		action: 'forward',
+	}
+	await fetch(`/room/${room.id}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(payload),
+	})
+}
+		</pre
+			>
+		</code>
 	</body>
 </html>
