@@ -1,15 +1,14 @@
-import { generateId } from './generateId'
+import { generateId } from './utilities/generateId'
 
 // @TODO: improve color selection
 const colors = [
 	[142, 75, 153],
-	[224, 54, 22],
 	[255, 246, 137],
 	[207, 255, 176],
 	[89, 152, 197],
 ] as const
 
-export const createPlayer = (token: string /* @TODO: readonly */) => {
+export const createPlayer = (token: string, name = '') => {
 	const id = generateId()
 	const color = colors[Math.floor(Math.random() * colors.length)]
 
@@ -17,6 +16,7 @@ export const createPlayer = (token: string /* @TODO: readonly */) => {
 
 	return {
 		id,
+		name,
 		color,
 		checkToken,
 	}

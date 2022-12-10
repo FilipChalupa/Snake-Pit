@@ -1,3 +1,35 @@
+const storageTokenKey = 'token'
+const token = await (async () => {
+	const tokenFromStorage = localStorage.getItem(storageTokenKey)
+	if (tokenFromStorage !== null) {
+		const response = await fetch('/me', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				playerToken: tokenFromStorage,
+			}),
+		})
+		const data = await response.json()
+		if (data?.player?.id) {
+			return tokenFromStorage
+		}
+	}
+	const response = await fetch('/create-player', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			name: 'Testing bot',
+		}),
+	})
+	const { playerToken } = await response.json()
+	localStorage.setItem(storageTokenKey, playerToken)
+	return playerToken
+})()
+
 const id = await (async () => {
 	const idFromUrl = new URLSearchParams(location.search).get('id')
 	if (idFromUrl) {

@@ -1,6 +1,6 @@
 import { Player } from './createPlayer'
-import { generateId } from './generateId'
 import { assertNever } from './utilities/assertNever'
+import { generateId } from './utilities/generateId'
 
 const allowedActions = ['forward', 'left', 'right'] as const
 type ActionName = typeof allowedActions[number]

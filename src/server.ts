@@ -2,6 +2,7 @@ import cors from 'cors'
 import express from 'express'
 import { createPlayer, Player } from './createPlayer'
 import { createRoom, Room } from './createRoom'
+import { generateToken } from './utilities/generateToken'
 
 const port = process.env.PORT || 3000
 
@@ -12,7 +13,7 @@ app.use(express.json())
 const rooms: Room[] = []
 const players: Player[] = []
 
-players.push(createPlayer('anonymous'))
+players.push(createPlayer('anonymous', 'Anonymous'))
 // @TODO: remove
 rooms.push(createRoom())
 
@@ -31,6 +32,40 @@ app.get('/list-rooms', (request, response) => {
 app.post('/create-room', (request, response) => {
 	response.status(400).json({
 		error: 'Not implemented.',
+	})
+})
+const getPlayerInformation = (player: Player) => ({
+	id: player.id,
+	color: player.color,
+})
+app.post('/create-player', (request, response) => {
+	const name = (() => {
+		const name = request.body.name
+		if (typeof name === 'string') {
+			return name
+		}
+		return ''
+	})()
+	const playerToken = generateToken()
+	const player = createPlayer(playerToken, name)
+	players.push(player)
+	response.json({
+		player: getPlayerInformation(player),
+		playerToken,
+	})
+})
+app.post('/me', (request, response) => {
+	const player = players.find((player) =>
+		player.checkToken(request.body.playerToken),
+	)
+	if (!player) {
+		response.status(400).json({
+			error: 'Player not found.',
+		})
+		return
+	}
+	response.json({
+		player: getPlayerInformation(player),
 	})
 })
 const getRoomState = (room: Room) => {
