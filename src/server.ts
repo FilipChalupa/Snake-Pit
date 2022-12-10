@@ -14,9 +14,8 @@ app.use(express.json())
 const roomsManager = createRoomsManager()
 const players: Player[] = []
 
+// Player for testing purposes: maybe remove
 players.push(createPlayer('anonymous', 'Anonymous'))
-// @TODO: remove
-roomsManager.createRoom()
 
 app.get('/list-rooms', (request, response) => {
 	response.json({
