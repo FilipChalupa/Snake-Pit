@@ -22,6 +22,8 @@ type Food = {
 	position: Position
 }
 
+const maximumTimeToAction = 1000
+
 export const createRoom = (
 	width = 32,
 	height = 18,
@@ -34,6 +36,7 @@ export const createRoom = (
 	let food: Food[] = []
 	let pendingNextTickObservations: PendingObservation[] = []
 	let timeInTicks = 0
+	let timeoutPerform: ReturnType<typeof setTimeout>
 
 	const placeFood = () => {
 		if (food.length === maximumFood) {
@@ -68,6 +71,7 @@ export const createRoom = (
 	}
 
 	const performActions = () => {
+		clearTimeout(timeoutPerform)
 		timeInTicks++
 		if (state === 'playing') {
 			const foodIndexesToBeEaten: number[] = []
@@ -154,6 +158,7 @@ export const createRoom = (
 			pendingObservation.onTick()
 		})
 		pendingNextTickObservations = []
+		timeoutPerform = setTimeout(performActions, maximumTimeToAction)
 	}
 
 	const getTimeInTicks = () => timeInTicks
