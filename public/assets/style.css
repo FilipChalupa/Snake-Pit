@@ -21,3 +21,7 @@ body {
 	image-rendering: pixelated;
 	border: 0.0625rem solid;
 }
+
+code span {
+	font-style: italic;
+}

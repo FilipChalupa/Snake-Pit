@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Snake Pit</title>
+		<link rel="stylesheet" href="../assets/style.css" />
+		<meta name="color-scheme" content="light dark" />
+	</head>
+	<body>
+		<h1>Snake Pit</h1>
+		<h2>Documentation</h2>
+
+		<h3>List rooms</h3>
+		<pre><code>
+GET /list-rooms
+		</code></pre>
+
+		<h3>Create player</h3>
+		<pre><code>
+POST /create-player
+{
+	"name": "Sssneaky"
+}
+		</code></pre>
+
+		<h3>Player info</h3>
+		<pre><code>
+POST /me
+{
+	"playerToken": "<span>xyz123</span>"
+}
+		</code></pre>
+
+		<h3>Room detail</h3>
+		<pre><code>
+GET /room/<span>:id</span>
+GET /room/<span>:id</span>?immediate
+		</code></pre>
+
+		<h3>Perform in-room action</h3>
+		<pre><code>
+POST /room/<span>:id</span>
+{
+	"playerToken": "<span>xyz123</span>",
+	"action": "forward"
+}
+		</code></pre>
+		All posible actions: <code><span>"forward"</span></code
+		>, <code><span>"left"</span></code
+		>, <code><span>"right"</span></code>
+
+		<h3>Create custom room</h3>
+		<pre><code>
+POST /create-room
+{
+	"width": 10,
+	"height": 10,
+	"maximumPlayers": 1,
+	"maximumFood": 1
+}
+		</code></pre>
+	</body>
+</html>
