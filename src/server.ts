@@ -25,6 +25,7 @@ app.get('/list-rooms', (request, response) => {
 				.getPlayers()
 				.map(({ player }) => getPlayerInformation(player)),
 			maximumPlayers: room.maximumPlayers,
+			maximumFood: room.maximumFood,
 			width: room.width,
 			height: room.height,
 			status: room.getStatus(),

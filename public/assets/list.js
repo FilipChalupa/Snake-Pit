@@ -30,6 +30,8 @@ const refresh = async () => {
 						}</dd>
 						<dt>Maximum players</dt>
 						<dd>${room.maximumPlayers}</dd>
+						<dt>Maximum Food</dt>
+						<dd>${room.maximumFood}</dd>
 						<dt>Room size</dt>
 						<dd>${room.width}×${room.height}</dd>
 					</dl>

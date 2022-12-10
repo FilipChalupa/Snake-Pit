@@ -252,6 +252,7 @@ export const createRoom = (
 		width,
 		height,
 		maximumPlayers,
+		maximumFood,
 		getStatus: () => status,
 		getPlayers: () => players,
 		performAction,
