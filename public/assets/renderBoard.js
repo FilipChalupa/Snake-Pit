@@ -13,6 +13,7 @@ export const renderBoard = (roomId) => {
 	if (!context) {
 		throw new Error('Context construction failed.')
 	}
+	const score = document.createElement('ol')
 
 	let isFirstRequest = true
 	const loop = async () => {
@@ -21,6 +22,7 @@ export const renderBoard = (roomId) => {
 			isFirstRequest = false
 			url.searchParams.set('immediate', '')
 			target.appendChild(board)
+			target.appendChild(score)
 		}
 		const response = await fetch(url)
 		const {
@@ -51,6 +53,15 @@ export const renderBoard = (roomId) => {
 				)
 			})
 		})
+
+		score.innerHTML = ''
+		players
+			.sort((a, b) => b.fromHeadPosition.length - a.fromHeadPosition.length)
+			.forEach(({ name, id, fromHeadPosition }) => {
+				const li = document.createElement('li')
+				li.textContent = `${name || id}: ${fromHeadPosition.length}`
+				score.appendChild(li)
+			})
 
 		await loop()
 	}
