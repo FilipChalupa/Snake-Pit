@@ -1,5 +1,5 @@
 const storageTokenKey = 'token'
-const token = await (async () => {
+const playerToken = await (async () => {
 	const tokenFromStorage = localStorage.getItem(storageTokenKey)
 	if (tokenFromStorage !== null) {
 		const response = await fetch('/me', {
@@ -49,8 +49,6 @@ if (!id) {
 
 const board = document.querySelector('#field')
 board.src = `/room/?id=${id}`
-
-const playerToken = 'anonymous'
 
 const loop = async (action) => {
 	const payload = {
