@@ -19,20 +19,36 @@ rooms.push(createRoom())
 
 app.get('/list-rooms', (request, response) => {
 	response.json({
-		rooms: rooms.map((room) => ({
-			id: room.id,
-			joinedPlayers: room.getPlayers().length,
-			maximumPlayers: room.maximumPlayers,
-			width: room.width,
-			height: room.height,
-			state: room.getState(),
-		})),
+		rooms: rooms
+			.map((room) => ({
+				id: room.id,
+				joinedPlayers: room.getPlayers().length,
+				maximumPlayers: room.maximumPlayers,
+				width: room.width,
+				height: room.height,
+				state: room.getState(),
+			}))
+			.sort((a, b) => {
+				if (a.state === b.state) {
+					return 0
+				}
+				if (a.state === 'waiting') {
+					return -1
+				}
+				if (b.state === 'waiting') {
+					return 1
+				}
+				if (a.state === 'playing') {
+					return -1
+				}
+				return 1
+			}),
 	})
 })
 app.post('/create-room', (request, response) => {
-	response.status(400).json({
-		error: 'Not implemented.',
-	})
+	const room = createRoom(10, 10, 1)
+	rooms.push(room)
+	response.json({ room: getRoomState(room) })
 })
 const getPlayerInformation = (player: Player) => ({
 	id: player.id,
