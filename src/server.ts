@@ -21,7 +21,9 @@ app.get('/list-rooms', (request, response) => {
 	response.json({
 		rooms: roomsManager.getRooms().map((room) => ({
 			id: room.id,
-			joinedPlayers: room.getPlayers().length,
+			joinedPlayers: room
+				.getPlayers()
+				.map(({ player }) => getPlayerInformation(player)),
 			maximumPlayers: room.maximumPlayers,
 			width: room.width,
 			height: room.height,

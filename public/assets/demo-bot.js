@@ -42,7 +42,7 @@ const id = await (async () => {
 	const room = data.rooms.find(
 		(room) =>
 			room.state === 'waiting' &&
-			room.maximumPlayers - room.joinedPlayers === 1,
+			room.maximumPlayers - room.joinedPlayers.length === 1,
 	)
 	if (room) {
 		return room.id

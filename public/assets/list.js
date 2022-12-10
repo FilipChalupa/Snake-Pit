@@ -1,5 +1,13 @@
 const list = document.querySelector('#list')
 
+const escape = (htmlString) =>
+	htmlString
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;')
+
 const refresh = async () => {
 	const response = await fetch('/list-rooms')
 	const data = await response.json()
@@ -13,7 +21,13 @@ const refresh = async () => {
 						<dt>State</dt>
 						<dd>${room.state /* @TODO: translate */}</dd>
 						<dt>Joined players</dt>
-						<dd>${room.joinedPlayers}</dd>
+						<dd>${
+							room.joinedPlayers.length === 0
+								? '0'
+								: room.joinedPlayers
+										.map((player) => escape(player.name || player.id))
+										.join(', ')
+						}</dd>
 						<dt>Maximum players</dt>
 						<dd>${room.maximumPlayers}</dd>
 						<dt>Room size</dt>
