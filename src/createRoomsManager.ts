@@ -16,7 +16,7 @@ export const createRoomsManager = () => {
 				(otherRoom) => otherRoom.getState() === 'waiting',
 			)
 			const isSomeSinglePlayerRoomWaiting = waitingRooms.some(
-				(otherRoom) => otherRoom.getPlayers().length === 1,
+				(otherRoom) => otherRoom.maximumPlayers === 1,
 			)
 			if (!isSomeSinglePlayerRoomWaiting) {
 				createRoom(10, 10, 1, 1)
