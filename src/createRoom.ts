@@ -23,6 +23,7 @@ type Food = {
 }
 
 const maximumTimeToAction = 1000
+const maximumIdleTime = 10000
 
 export const createRoom = (
 	width = 32,
@@ -37,6 +38,14 @@ export const createRoom = (
 	let pendingNextTickObservations: PendingObservation[] = []
 	let timeInTicks = 0
 	let timeoutPerform: ReturnType<typeof setTimeout>
+	let timeoutIdle: ReturnType<typeof setTimeout>
+
+	const restartMaximumIdleTimeCheck = () => {
+		clearTimeout(timeoutIdle)
+		timeoutIdle = setTimeout(() => {
+			console.log('idle for too long')
+		}, maximumIdleTime)
+	}
 
 	const placeFood = () => {
 		if (food.length === maximumFood) {
@@ -164,6 +173,7 @@ export const createRoom = (
 	const getTimeInTicks = () => timeInTicks
 
 	const observeNextTick = async () => {
+		restartMaximumIdleTimeCheck()
 		await new Promise((resolve) => {
 			pendingNextTickObservations.push({
 				onTick: () => {
@@ -174,6 +184,7 @@ export const createRoom = (
 	}
 
 	const performAction = async (player: Player, action: string) => {
+		restartMaximumIdleTimeCheck()
 		const playerWithAction = (() => {
 			const playerWithAction = players.find((p) => p.player.id === player.id)
 			if (playerWithAction) {
