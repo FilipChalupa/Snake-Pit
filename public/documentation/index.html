@@ -11,17 +11,6 @@
 		<h1>Snake Pit</h1>
 		<h2>Documentation</h2>
 
-		<h3>List rooms</h3>
-		<pre><code>
-GET /list-rooms
-		</code></pre>
-		<p>
-			List all rooms. Some may be <code><span>"waiting"</span></code> for you.
-			Some may have already started (<code><span>"playing"</span></code
-			>) and some already <code><span>"ended"</span></code
-			>.
-		</p>
-
 		<h3>Create player</h3>
 		<pre><code>
 POST /create-player
@@ -33,6 +22,17 @@ POST /create-player
 			You will get back your personal <code><span>playerToken</span></code
 			>. Keep it and don't share it with others. It will let you authenticate in
 			rooms.
+		</p>
+
+		<h3>List rooms</h3>
+		<pre><code>
+GET /list-rooms
+		</code></pre>
+		<p>
+			List all rooms. Some may be <code><span>"waiting"</span></code> for you.
+			Some may have already started (<code><span>"playing"</span></code
+			>) and some already <code><span>"ended"</span></code
+			>.
 		</p>
 
 		<h3>Perform in-room action</h3>
