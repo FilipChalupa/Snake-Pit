@@ -26,6 +26,7 @@ const maximumTimeToAction = 1000
 const maximumIdleTime = 10000
 
 export const createRoom = (
+	onRoomAbandoned = () => {},
 	width = 32,
 	height = 18,
 	maximumPlayers = 2,
@@ -43,7 +44,7 @@ export const createRoom = (
 	const restartMaximumIdleTimeCheck = () => {
 		clearTimeout(timeoutIdle)
 		timeoutIdle = setTimeout(() => {
-			console.log('idle for too long')
+			onRoomAbandoned()
 		}, maximumIdleTime)
 	}
 

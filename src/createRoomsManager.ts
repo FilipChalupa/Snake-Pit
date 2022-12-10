@@ -3,7 +3,10 @@ import { createRoom as createStandaloneRoom, Room } from './createRoom'
 export const createRoomsManager = () => {
 	let rooms: Room[] = []
 	const createRoom = () => {
-		const room = createStandaloneRoom()
+		const onRoomAbandoned = () => {
+			rooms = rooms.filter((otherRoom) => otherRoom !== room)
+		}
+		const room = createStandaloneRoom(onRoomAbandoned)
 		rooms.push(room)
 		return room
 	}
