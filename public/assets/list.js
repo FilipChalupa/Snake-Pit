@@ -1,15 +1,8 @@
 import { colorToSymbol } from './colorToSymbol.js'
+import { escape } from './escape.js'
 
 const roomList = document.querySelector('#roomList')
 const playerList = document.querySelector('#playerList')
-
-const escape = (htmlString) =>
-	htmlString
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&#39;')
 
 const refreshRooms = async () => {
 	const response = await fetch('/list-rooms')

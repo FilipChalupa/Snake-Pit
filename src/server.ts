@@ -91,6 +91,18 @@ app.post('/me', (request, response) => {
 		player: getPlayerInformation(player),
 	})
 })
+app.get('/player/:id', (request, response) => {
+	const player = playersManager.findPlayerById(request.params.id)
+	if (!player) {
+		response.status(400).json({
+			error: 'Player not found.',
+		})
+		return
+	}
+	response.json({
+		player: getPlayerInformation(player),
+	})
+})
 const getRoomStatus = (room: Room) => {
 	const players = room.getPlayers().map((player) => ({
 		id: player.player.id,

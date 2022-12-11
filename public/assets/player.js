@@ -1,6 +1,19 @@
+import { colorToSymbol } from './colorToSymbol.js'
+import { escape } from './escape.js'
 import { renderBoard } from './renderBoard.js'
 
-const run = () => {
+const run = async () => {
+	const response = await fetch(`/player/${playerId}`)
+	const { player } = await response.json()
+	if (!player?.id) {
+		location.href = '/'
+	}
+
+	const playerName = document.querySelector('#playerName')
+	playerName.innerHTML = `${colorToSymbol(player.color)} ${escape(
+		player.name || player.id,
+	)}`
+
 	let roomId = null
 	let stopRenderingBoard = () => {}
 	const loop = async () => {
