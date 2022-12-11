@@ -199,7 +199,7 @@ export const createRoom = (
 				return playerWithAction
 			}
 			if (players.length <= maximumPlayers) {
-				const yStart = 1 + players.length * 2
+				const yStart = 1 + players.length * 3
 				const playerWithAction: PlayingPlayer = {
 					isAlive: true,
 					fromHeadPosition: [
