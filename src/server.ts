@@ -47,8 +47,8 @@ app.post('/create-room', (request, response) => {
 		}
 		return min + Math.floor(Math.random() * (max - min))
 	}
-	const width = readNumber('width', 10, 100)
-	const height = readNumber('height', 10, 100)
+	const width = readNumber('width', 5, 100)
+	const height = readNumber('height', 5, 100)
 	const maximumPlayers = readNumber('maximumPlayers', 1, 10)
 	const maximumFood = readNumber('maximumFood', 1, 100)
 	const room = roomsManager.createRoom(
