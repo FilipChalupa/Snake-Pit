@@ -10,19 +10,10 @@ export const createRoomsManager = () => {
 	) => {
 		const onRoomAbandoned = () => {
 			rooms = rooms.filter((otherRoom) => otherRoom !== room)
+			assureSomeRoomsAreWaiting()
 		}
 		const onRoomStatusChanged = () => {
-			const waitingRooms = rooms.filter(
-				(otherRoom) => otherRoom.getStatus() === 'waiting',
-			)
-			const isSomeSinglePlayerRoomWaiting = waitingRooms.some(
-				(otherRoom) => otherRoom.maximumPlayers === 1,
-			)
-			if (!isSomeSinglePlayerRoomWaiting) {
-				createRoom(10, 10, 1, 1)
-			} else if (waitingRooms.length === 0) {
-				createRoom(32, 18, 1 + Math.floor(Math.random() * 4), 10)
-			}
+			assureSomeRoomsAreWaiting()
 		}
 		const room = createStandaloneRoom(
 			onRoomAbandoned,
@@ -59,6 +50,20 @@ export const createRoomsManager = () => {
 		}
 	}
 	createInitialRooms()
+
+	const assureSomeRoomsAreWaiting = () => {
+		const waitingRooms = rooms.filter(
+			(otherRoom) => otherRoom.getStatus() === 'waiting',
+		)
+		const isSomeSinglePlayerRoomWaiting = waitingRooms.some(
+			(otherRoom) => otherRoom.maximumPlayers === 1,
+		)
+		if (!isSomeSinglePlayerRoomWaiting) {
+			createRoom(10, 10, 1, 1)
+		} else if (waitingRooms.length === 0) {
+			createRoom(32, 18, 1 + Math.floor(Math.random() * 4), 10)
+		}
+	}
 
 	return {
 		createRoom,
