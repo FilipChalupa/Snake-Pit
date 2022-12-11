@@ -1,3 +1,4 @@
+import { colorToSymbol } from './colorToSymbol.js'
 const fieldSize = 20
 const gapSize = 2
 
@@ -62,9 +63,10 @@ export const renderBoard = (roomId) => {
 		score.innerHTML = ''
 		players
 			.sort((a, b) => b.fromHeadPosition.length - a.fromHeadPosition.length)
-			.forEach(({ name, id, fromHeadPosition }) => {
+			.forEach(({ name, color, id, fromHeadPosition }) => {
 				const li = document.createElement('li')
 				li.textContent = `${name || id}: ${fromHeadPosition.length}`
+				li.innerHTML = `${colorToSymbol(color)} ${li.innerHTML}`
 				score.appendChild(li)
 			})
 
