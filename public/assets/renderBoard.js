@@ -6,6 +6,7 @@ export const renderBoard = (roomId) => {
 	if (!(target instanceof HTMLElement)) {
 		throw new Error('Board target is missing.')
 	}
+	target.innerHTML = ''
 
 	const board = document.createElement('canvas')
 	board.classList.add('board')
@@ -13,6 +14,7 @@ export const renderBoard = (roomId) => {
 	if (!context) {
 		throw new Error('Context construction failed.')
 	}
+	let isRunning = true
 	const score = document.createElement('ol')
 
 	let isFirstRequest = true
@@ -28,6 +30,9 @@ export const renderBoard = (roomId) => {
 		const {
 			room: { width, height, players, food },
 		} = await response.json()
+		if (!isRunning) {
+			return
+		}
 		board.width = width * fieldSize
 		board.height = height * fieldSize
 		food.forEach(({ position: { x, y } }) => {
@@ -66,4 +71,10 @@ export const renderBoard = (roomId) => {
 		await loop()
 	}
 	loop()
+
+	const stop = () => {
+		isRunning = false
+	}
+
+	return stop
 }

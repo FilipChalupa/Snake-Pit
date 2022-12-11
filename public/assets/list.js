@@ -49,7 +49,7 @@ const refreshPlayers = async () => {
 		.map(
 			(player) => /* html */ `
 				<li>
-					<h3>${escape(player.name) || id}</h3>
+					<h3><a href="/player/?id=${player.id}">${escape(player.name) || id}</a></h3>
 					<dl>
 						<dt>Rating</dt>
 						<dd>@TODO</dd>
