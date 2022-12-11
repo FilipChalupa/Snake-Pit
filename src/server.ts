@@ -1,6 +1,7 @@
 import cors from 'cors'
 import express from 'express'
-import { createPlayer, Player } from './createPlayer'
+import { Player } from './createPlayer'
+import { createPlayersManager } from './createPlayersManager'
 import { Room } from './createRoom'
 import { createRoomsManager } from './createRoomsManager'
 import { generateToken } from './utilities/generateToken'
@@ -12,10 +13,7 @@ app.use(cors())
 app.use(express.json())
 
 const roomsManager = createRoomsManager()
-const players: Player[] = []
-
-// Player for testing purposes: maybe remove
-players.push(createPlayer('anonymous', 'Anonymous'))
+const playersManager = createPlayersManager()
 
 app.get('/list-rooms', (request, response) => {
 	response.json({
@@ -65,17 +63,14 @@ app.post('/create-player', (request, response) => {
 		return ''
 	})()
 	const playerToken = generateToken()
-	const player = createPlayer(playerToken, name)
-	players.push(player)
+	const player = playersManager.createPlayer(playerToken, name)
 	response.json({
 		player: getPlayerInformation(player),
 		playerToken,
 	})
 })
 app.post('/me', (request, response) => {
-	const player = players.find((player) =>
-		player.checkToken(request.body.playerToken),
-	)
+	const player = playersManager.findPlayerByToken(request.body.playerToken)
 	if (!player) {
 		response.status(400).json({
 			error: 'Player not found.',
@@ -130,9 +125,7 @@ app.post('/room/:id', async (request, response) => {
 		})
 		return
 	}
-	const player = players.find((player) =>
-		player.checkToken(request.body.playerToken),
-	)
+	const player = playersManager.findPlayerByToken(request.body.playerToken)
 	if (!player) {
 		response.status(400).json({
 			error: 'Player not found.',
