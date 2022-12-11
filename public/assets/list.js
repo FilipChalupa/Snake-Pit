@@ -1,3 +1,5 @@
+import { colorToSymbol } from './colorToSymbol.js'
+
 const roomList = document.querySelector('#roomList')
 const playerList = document.querySelector('#playerList')
 
@@ -26,7 +28,12 @@ const refreshRooms = async () => {
 							room.joinedPlayers.length === 0
 								? '0'
 								: room.joinedPlayers
-										.map((player) => escape(player.name || player.id))
+										.map(
+											(player) =>
+												`${colorToSymbol(player.color)} ${escape(
+													player.name || player.id,
+												)}`,
+										)
 										.join(', ')
 						}</dd>
 						<dt>Maximum players</dt>
@@ -49,7 +56,9 @@ const refreshPlayers = async () => {
 		.map(
 			(player) => /* html */ `
 				<li>
-					<h3><a href="/player/?id=${player.id}">${escape(player.name) || id}</a></h3>
+					<h3><a href="/player/?id=${player.id}">${colorToSymbol(player.color)} ${
+				escape(player.name) || id
+			}</a></h3>
 					<dl>
 						<dt>Rating</dt>
 						<dd>@TODO</dd>
