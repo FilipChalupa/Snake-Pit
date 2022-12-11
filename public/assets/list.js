@@ -1,4 +1,5 @@
-const list = document.querySelector('#list')
+const roomList = document.querySelector('#roomList')
+const playerList = document.querySelector('#playerList')
 
 const escape = (htmlString) =>
 	htmlString
@@ -8,10 +9,10 @@ const escape = (htmlString) =>
 		.replace(/"/g, '&quot;')
 		.replace(/'/g, '&#39;')
 
-const refresh = async () => {
+const refreshRooms = async () => {
 	const response = await fetch('/list-rooms')
 	const data = await response.json()
-	list.innerHTML = data.rooms
+	roomList.innerHTML = data.rooms
 		.map(
 			(room) => /* html */ `
 				<li>
@@ -39,6 +40,29 @@ const refresh = async () => {
 			`,
 		)
 		.join('')
+}
+
+const refreshPlayers = async () => {
+	const response = await fetch('/list-players')
+	const data = await response.json()
+	playerList.innerHTML = data.rooms
+		.map(
+			(player) => /* html */ `
+				<li>
+					<h3>${escape(player.name) || id}</h3>
+					<dl>
+						<dt>Rating</dt>
+						<dd>@TODO</dd>
+					</dl>
+				</li>
+			`,
+		)
+		.join('')
+}
+
+const refresh = async () => {
+	await refreshRooms()
+	await refreshPlayers()
 }
 
 const loop = async () => {

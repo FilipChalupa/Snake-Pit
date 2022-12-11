@@ -30,6 +30,16 @@ app.get('/list-rooms', (request, response) => {
 		})),
 	})
 })
+
+app.get('/list-players', (request, response) => {
+	response.json({
+		rooms: playersManager.getPlayers().map((player) => ({
+			id: player.id,
+			name: player.name,
+			color: player.color,
+		})),
+	})
+})
 app.post('/create-room', (request, response) => {
 	const readNumber = (key: string, min: number, max: number) => {
 		if (typeof request.body[key] === 'number') {
