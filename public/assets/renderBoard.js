@@ -49,14 +49,26 @@ export const renderBoard = (roomId) => {
 			context.fill()
 		})
 		players.forEach(({ isAlive, color, fromHeadPosition }) => {
-			fromHeadPosition.forEach(({ x, y }) => {
+			fromHeadPosition.forEach(({ x, y }, i) => {
+				const positionCloserToHead = i > 0 ? fromHeadPosition[i - 1] : null
 				context.fillStyle = isAlive ? `rgb(${color.join(',')})` : 'gray'
+				context.strokeStyle = context.fillStyle
 				context.fillRect(
 					x * fieldSize + gapSize / 2,
 					y * fieldSize + gapSize / 2,
 					fieldSize - gapSize,
 					fieldSize - gapSize,
 				)
+				if (positionCloserToHead) {
+					context.beginPath()
+					context.moveTo((x + 0.5) * fieldSize, (y + 0.5) * fieldSize)
+					context.lineTo(
+						(positionCloserToHead.x + 0.5) * fieldSize,
+						(positionCloserToHead.y + 0.5) * fieldSize,
+					)
+					context.lineWidth = fieldSize - gapSize
+					context.stroke()
+				}
 			})
 		})
 
