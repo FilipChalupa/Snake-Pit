@@ -1,3 +1,4 @@
+import { createArtificialDelay } from './createArtificialDelay'
 import { Player } from './createPlayer'
 import { assertNever } from './utilities/assertNever'
 import { generateId } from './utilities/generateId'
@@ -25,6 +26,7 @@ type Status = 'waiting' | 'playing' | 'ended'
 
 const maximumTimeToAction = 1000
 const maximumIdleTime = 60000
+const artificialDelayTime = 200
 
 export const createRoom = (
 	onRoomAbandoned = () => {},
@@ -42,6 +44,9 @@ export const createRoom = (
 	let timeInTicks = 0
 	let timeoutPerform: ReturnType<typeof setTimeout>
 	let timeoutIdle: ReturnType<typeof setTimeout>
+	const artificialActionsDelay = createArtificialDelay(() => {
+		performActionsIfPossible()
+	})
 
 	const changeStatus = (newStatus: Status) => {
 		status = newStatus
@@ -176,6 +181,7 @@ export const createRoom = (
 		})
 		pendingNextTickObservations = []
 		timeoutPerform = setTimeout(performActions, maximumTimeToAction)
+		artificialActionsDelay.startDelay(artificialDelayTime)
 	}
 
 	const getTimeInTicks = () => timeInTicks
@@ -234,17 +240,22 @@ export const createRoom = (
 					resolve(undefined)
 				},
 				onRejected: () => {
-					reject(new Error('Pending action was ovverriden.'))
+					reject(new Error('Pending action was overriden.'))
 				},
 			}
-			if (
-				players.every(
-					(player) => player.pendingAction !== null || player.isAlive === false,
-				)
-			) {
-				performActions()
-			}
+			performActionsIfPossible()
 		})
+	}
+
+	const performActionsIfPossible = () => {
+		if (
+			players.every(
+				(player) => player.pendingAction !== null || player.isAlive === false,
+			) &&
+			artificialActionsDelay.isDelaying() === false
+		) {
+			performActions()
+		}
 	}
 
 	return {
