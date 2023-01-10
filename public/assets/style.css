@@ -10,9 +10,7 @@
 }
 
 body {
-	max-width: 40rem;
-	margin: 0 auto;
-	padding: var(--page-gap);
+	/* padding: var(--page-gap); */
 }
 
 .board {
@@ -38,4 +36,8 @@ dl {
 	width: 0.8em;
 	aspect-ratio: 1;
 	background-color: var(--color);
+}
+
+ul {
+	padding: 0;
 }

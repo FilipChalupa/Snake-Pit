@@ -10,33 +10,38 @@ const refreshRooms = async () => {
 	roomList.innerHTML = data.rooms
 		.map(
 			(room) => /* html */ `
-				<li>
-					<h3><a href="/room/?id=${room.id}">${room.id}</a></h3>
-					<small><a href="/demo-bot/?id=${room.id}">Join as demo bot</a></small>
-					<dl>
-						<dt>Status</dt>
-						<dd>${room.status /* @TODO: translate */}</dd>
-						<dt>Joined players</dt>
-						<dd>${
-							room.joinedPlayers.length === 0
-								? '0'
-								: room.joinedPlayers
-										.map(
-											(player) =>
-												`${colorToSymbol(player.color)} ${escape(
-													player.name || player.id,
-												)}`,
-										)
-										.join(', ')
-						}</dd>
-						<dt>Maximum players</dt>
-						<dd>${room.maximumPlayers}</dd>
-						<dt>Maximum Food</dt>
-						<dd>${room.maximumFood}</dd>
-						<dt>Room size</dt>
-						<dd>${room.width}×${room.height}</dd>
-					</dl>
-				</li>
+				<div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+					<div class="card mb-4">
+						<div class="card-body">
+							<h5 class="card-title">${room.id}</h5>
+							<dl>
+								<dt>Status</dt>
+								<dd>${room.status /* @TODO: translate */}</dd>
+								<dt>Joined players</dt>
+								<dd>${
+									room.joinedPlayers.length === 0
+										? '0'
+										: room.joinedPlayers
+												.map(
+													(player) =>
+														`${colorToSymbol(player.color)} ${escape(
+															player.name || player.id,
+														)}`,
+												)
+												.join(', ')
+								}</dd>
+								<dt>Maximum players</dt>
+								<dd>${room.maximumPlayers}</dd>
+								<dt>Maximum Food</dt>
+								<dd>${room.maximumFood}</dd>
+								<dt>Room size</dt>
+								<dd>${room.width}×${room.height}</dd>
+							</dl>
+							<a href="/room/?id=${room.id}" class="btn btn-primary">Open</a>
+							<a href="/demo-bot/?id=${room.id}" class="btn btn-link">Join as demo bot</a>
+						</div>
+					</div>
+				</div>
 			`,
 		)
 		.join('')
