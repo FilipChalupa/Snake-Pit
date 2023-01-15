@@ -60,24 +60,21 @@ export const createRoom = (
 	}
 
 	const updateRating = () => {
+		const pendingUpdates: Array<() => void> = []
 		players.forEach((player) => {
 			players.forEach((otherPlayer) => {
-				if (player.player.id === otherPlayer.player.id) {
+				const score = player.fromHeadPosition.length
+				const otherScore = otherPlayer.fromHeadPosition.length
+				if (score === otherScore) {
 					return
 				}
-				if (
-					player.fromHeadPosition.length === otherPlayer.fromHeadPosition.length
-				) {
-					return
-				}
-				// @TODO: use a better rating system - e.g. https://en.wikipedia.org/wiki/Elo_rating_system
-				player.player.adjustRating(
-					player.fromHeadPosition.length > otherPlayer.fromHeadPosition.length
-						? 1
-						: -1,
-				)
+				pendingUpdates.push(() => {
+					// @TODO: use a better rating system - e.g. https://en.wikipedia.org/wiki/Elo_rating_system
+					player.player.adjustRating(score > otherScore ? 1 : -1)
+				})
 			})
 		})
+		pendingUpdates.forEach((update) => update())
 	}
 
 	const restartMaximumIdleTimeCheck = () => {
