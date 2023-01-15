@@ -49,8 +49,35 @@ export const createRoom = (
 	})
 
 	const changeStatus = (newStatus: Status) => {
+		if (status === newStatus) {
+			return
+		}
 		status = newStatus
+		if (status === 'ended') {
+			updateRating()
+		}
 		onRoomStatusChanged()
+	}
+
+	const updateRating = () => {
+		players.forEach((player) => {
+			players.forEach((otherPlayer) => {
+				if (player.player.id === otherPlayer.player.id) {
+					return
+				}
+				if (
+					player.fromHeadPosition.length === otherPlayer.fromHeadPosition.length
+				) {
+					return
+				}
+				// @TODO: use a better rating system - e.g. https://en.wikipedia.org/wiki/Elo_rating_system
+				player.player.adjustRating(
+					player.fromHeadPosition.length > otherPlayer.fromHeadPosition.length
+						? 1
+						: -1,
+				)
+			})
+		})
 	}
 
 	const restartMaximumIdleTimeCheck = () => {
