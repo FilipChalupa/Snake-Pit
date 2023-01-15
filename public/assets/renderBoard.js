@@ -53,12 +53,24 @@ export const renderBoard = (roomId) => {
 				const positionCloserToHead = i > 0 ? fromHeadPosition[i - 1] : null
 				context.fillStyle = isAlive ? `rgb(${color.join(',')})` : 'gray'
 				context.strokeStyle = context.fillStyle
-				context.fillRect(
-					x * fieldSize + gapSize / 2,
-					y * fieldSize + gapSize / 2,
-					fieldSize - gapSize,
-					fieldSize - gapSize,
-				)
+				if ('roundRect' in context && i === 0) {
+					context.beginPath()
+					context.roundRect(
+						x * fieldSize + gapSize / 2,
+						y * fieldSize + gapSize / 2,
+						fieldSize - gapSize,
+						fieldSize - gapSize,
+						2 * gapSize,
+					)
+					context.fill()
+				} else {
+					context.fillRect(
+						x * fieldSize + gapSize / 2,
+						y * fieldSize + gapSize / 2,
+						fieldSize - gapSize,
+						fieldSize - gapSize,
+					)
+				}
 				if (positionCloserToHead) {
 					context.beginPath()
 					context.moveTo((x + 0.5) * fieldSize, (y + 0.5) * fieldSize)
