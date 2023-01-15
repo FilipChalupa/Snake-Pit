@@ -127,8 +127,6 @@ const loop = async (action) => {
 			nextAction = options[Math.floor(Math.random() * options.length)]
 		}
 	}
-	// @TODO: remove delay
-	await new Promise((resolve) => setTimeout(resolve, 100))
 	await loop(nextAction)
 }
 loop('forward')
