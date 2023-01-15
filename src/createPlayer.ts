@@ -6,6 +6,10 @@ const colors = [
 	[255, 246, 137],
 	[207, 255, 176],
 	[89, 152, 197],
+	[197, 89, 174],
+	[70, 108, 189],
+	[90, 189, 70],
+	[189, 70, 70],
 ] as const
 
 export const createPlayer = (token: string, name = '') => {
