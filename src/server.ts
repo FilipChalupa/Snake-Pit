@@ -33,11 +33,15 @@ app.get('/list-rooms', (request, response) => {
 
 app.get('/list-players', (request, response) => {
 	response.json({
-		rooms: playersManager.getPlayers().map((player) => ({
-			id: player.id,
-			name: player.name,
-			color: player.color,
-		})),
+		rooms: playersManager
+			.getPlayers()
+			.map((player) => ({
+				id: player.id,
+				name: player.name,
+				color: player.color,
+				rating: player.getRating(),
+			}))
+			.sort((a, b) => b.rating - a.rating),
 	})
 })
 app.post('/create-room', (request, response) => {

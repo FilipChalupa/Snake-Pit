@@ -15,6 +15,7 @@ const colors = [
 export const createPlayer = (token: string, name = '') => {
 	const id = generateId()
 	const color = colors[Math.floor(Math.random() * colors.length)]
+	let rating = 1500
 
 	const checkToken = (tokenToValidate: string) => tokenToValidate === token
 
@@ -22,6 +23,7 @@ export const createPlayer = (token: string, name = '') => {
 		id,
 		name,
 		color,
+		getRating: () => rating,
 		checkToken,
 	}
 }

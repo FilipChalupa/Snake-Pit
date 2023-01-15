@@ -59,7 +59,7 @@ const refreshPlayers = async () => {
 			}</a></h3>
 					<dl>
 						<dt>Rating</dt>
-						<dd>@TODO</dd>
+						<dd>${player.rating}</dd>
 					</dl>
 				</li>
 			`,
