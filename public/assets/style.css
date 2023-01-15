@@ -5,17 +5,11 @@
 }
 
 :root {
-	--page-gap: 1rem;
 	font-family: sans-serif;
 }
 
-body {
-	/* padding: var(--page-gap); */
-}
-
 .board {
-	width: calc(100% + 2 * var(--page-gap));
-	margin-inline: calc(-1 * var(--page-gap));
+	width: 100%;
 	image-rendering: pixelated;
 	border: 0.0625rem solid;
 }
