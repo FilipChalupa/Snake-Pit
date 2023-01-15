@@ -233,6 +233,7 @@ export const createRoom = (
 				const playerWithAction: PlayingPlayer = {
 					isAlive: true,
 					fromHeadPosition: [
+						{ x: 3, y: yStart },
 						{ x: 2, y: yStart },
 						{ x: 1, y: yStart },
 					],
