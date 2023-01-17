@@ -19,8 +19,8 @@ export const createPlayer = (token: string, name = '') => {
 
 	const checkToken = (tokenToValidate: string) => tokenToValidate === token
 
-	const updateRating = (newRating: number) => {
-		rating = newRating
+	const adjustRating = (adjustment: number) => {
+		rating = Math.max(0, rating + adjustment)
 	}
 
 	return {
@@ -28,7 +28,7 @@ export const createPlayer = (token: string, name = '') => {
 		name,
 		color,
 		getRating: () => rating,
-		updateRating,
+		adjustRating,
 		checkToken,
 	}
 }

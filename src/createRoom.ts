@@ -83,16 +83,14 @@ export const createRoom = (
 
 				const k = 32
 
-				const playerNewRating = Math.round(
-					player.player.getRating() + k * (playerS - playerE),
-				)
-				const otherPlayerNewRating = Math.round(
-					otherPlayer.player.getRating() + k * (otherPlayerS - otherPlayerE),
+				const playerRatingAdjustment = Math.round(k * (playerS - playerE))
+				const otherPlayerRatingAdjustment = Math.round(
+					k * (otherPlayerS - otherPlayerE),
 				)
 
 				pendingUpdates.push(() => {
-					player.player.updateRating(playerNewRating)
-					otherPlayer.player.updateRating(otherPlayerNewRating)
+					player.player.adjustRating(playerRatingAdjustment)
+					otherPlayer.player.adjustRating(otherPlayerRatingAdjustment)
 				})
 			})
 		})
