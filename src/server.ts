@@ -35,12 +35,7 @@ app.get('/list-players', (request, response) => {
 	response.json({
 		rooms: playersManager
 			.getPlayers()
-			.map((player) => ({
-				id: player.id,
-				name: player.name,
-				color: player.color,
-				rating: player.getRating(),
-			}))
+			.map((player) => getPlayerInformation(player))
 			.sort((a, b) => b.rating - a.rating),
 	})
 })
@@ -67,6 +62,7 @@ const getPlayerInformation = (player: Player) => ({
 	id: player.id,
 	color: player.color,
 	name: player.name,
+	rating: player.getRating(),
 })
 app.post('/create-player', (request, response) => {
 	const name = (() => {
