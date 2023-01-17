@@ -76,16 +76,24 @@
 }</code></pre>
 			<p>
 				Sending any <code><span>action</span></code> to this endpoint will
-				automatically join you to the room with.
+				automatically join you to the room.
 			</p>
 			<p>
 				Use <code><span>playerToken</span></code> you have aquired from
 				<code><span>/create-player</span></code> endpoint.
 			</p>
 			<p>
-				All posible actions: <code><span>"forward"</span></code
+				All posible actions are <code><span>"forward"</span></code
 				>, <code><span>"left"</span></code
-				>, <code><span>"right"</span></code>
+				>, <code><span>"right"</span></code
+				>. Send any of them accordingly to control your snake. Response to the
+				endpoint above will always give you a new game state with your action
+				applied.
+			</p>
+			<p>
+				Room runs in a loop. In each turn (server tick) it waits for all joined
+				players to send their action. But don't you take too long calculating
+				your next move. There is a time limit between turns.
 			</p>
 
 			<h3 class="mb-4">Room detail</h3>
