@@ -9,7 +9,22 @@
 }
 
 body {
+	position: relative;
 	overflow-y: scroll;
+	padding-bottom: 1rem;
+	min-height: 100vh;
+	min-height: 100svh;
+}
+
+body::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image: url('snake-skin.jpg');
+	background-size: cover;
+	background-attachment: fixed;
+	z-index: -1;
+	opacity: 0.05;
 }
 
 .board {
