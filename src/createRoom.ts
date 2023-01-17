@@ -69,8 +69,9 @@ export const createRoom = (
 					return
 				}
 				pendingUpdates.push(() => {
-					// @TODO: use a better rating system - e.g. https://en.wikipedia.org/wiki/Elo_rating_system
-					player.player.adjustRating(score > otherScore ? 1 : -1)
+					player.player.updateRating(
+						player.player.getRating() + (score > otherScore ? 1 : -1),
+					)
 				})
 			})
 		})
@@ -257,7 +258,8 @@ export const createRoom = (
 		return new Promise((resolve, reject) => {
 			if (playerWithAction.pendingAction !== null) {
 				//reject(new Error('Already performing an action.'))
-				playerWithAction.pendingAction.onRejected()
+				//playerWithAction.pendingAction.onRejected()
+				// @TODO: so far the line above crashes the server
 			}
 			playerWithAction.pendingAction = {
 				name: allowedAction,
