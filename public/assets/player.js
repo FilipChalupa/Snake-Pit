@@ -13,6 +13,8 @@ const run = async () => {
 	playerName.innerHTML = `${colorToSymbol(player.color)} ${escape(
 		player.name || player.id,
 	)}`
+	const playerRating = document.querySelector('#playerRating')
+	playerRating.textContent = player.rating
 
 	let roomId = null
 	let stopRenderingBoard = () => {}
