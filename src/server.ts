@@ -155,6 +155,7 @@ app.post('/room/:id', async (request, response) => {
 		return
 	}
 	const action = (() => {
+		// @TODO: remove once legacy clients use new action names
 		const action = request.body.action
 		if (action === 'left') {
 			return 'turnLeft'
