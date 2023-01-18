@@ -81,8 +81,8 @@
 				<code>/create-player</code> endpoint.
 			</p>
 			<p>
-				All posible actions are <code>"forward"</code>, <code>"left"</code>,
-				<code>"right"</code>. Send any of them accordingly to control your
+				All posible actions are <code>"forward"</code>, <code>"turnLeft"</code>,
+				<code>"turnRight"</code>. Send any of them accordingly to control your
 				snake. Response to the endpoint above will always give you a new game
 				state with your action applied.
 			</p>
@@ -154,7 +154,7 @@ while (true) {
 	})
 	const { room } = await response.json()
 	// @TODO: evaluate room state
-	action = Math.random() > 0.2 ? 'forward' : 'right' // randomly turn right
+	action = Math.random() > 0.2 ? 'forward' : 'turnRight' // randomly turn right
 }
 </code>
 		</pre>

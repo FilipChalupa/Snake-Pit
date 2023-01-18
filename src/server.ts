@@ -154,7 +154,17 @@ app.post('/room/:id', async (request, response) => {
 		})
 		return
 	}
-	await room.performAction(player, request.body.action)
+	const action = (() => {
+		const action = request.body.action
+		if (action === 'left') {
+			return 'turnLeft'
+		}
+		if (action === 'right') {
+			return 'turnRight'
+		}
+		return action
+	})()
+	await room.performAction(player, action)
 	response.json({ room: getRoomStatus(room), yourPlayerId: player.id })
 })
 

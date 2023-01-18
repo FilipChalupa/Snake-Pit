@@ -118,10 +118,10 @@ const loop = async (action) => {
 			}
 		}
 		if (isLeftFree) {
-			options.push('left')
+			options.push('turnLeft')
 		}
 		if (isRightFree) {
-			options.push('right')
+			options.push('turnRight')
 		}
 		if (options.length > 0) {
 			nextAction = options[Math.floor(Math.random() * options.length)]

@@ -3,7 +3,7 @@ import { Player } from './createPlayer'
 import { assertNever } from './utilities/assertNever'
 import { generateId } from './utilities/generateId'
 
-const allowedActions = ['forward', 'left', 'right'] as const
+const allowedActions = ['forward', 'turnLeft', 'turnRight'] as const
 type ActionName = typeof allowedActions[number]
 type Position = { x: number; y: number }
 type PlayingPlayer = {
@@ -144,12 +144,12 @@ export const createRoom = (
 									x: headPosition.x + lastDirection.x,
 									y: headPosition.y + lastDirection.y,
 							  }
-							: actionName === 'left'
+							: actionName === 'turnLeft'
 							? {
 									x: headPosition.x + lastDirection.y,
 									y: headPosition.y - lastDirection.x,
 							  }
-							: actionName === 'right'
+							: actionName === 'turnRight'
 							? {
 									x: headPosition.x - lastDirection.y,
 									y: headPosition.y + lastDirection.x,
@@ -257,8 +257,9 @@ export const createRoom = (
 		})()
 		checkAllReady()
 		if (!allowedActions.includes(action as ActionName)) {
-			// @TODO
-			throw new Error('Invalid action.')
+			// @TODO: send client error message
+			// throw new Error('Invalid action.')
+			action = 'forward'
 		}
 		const allowedAction = action as ActionName
 		//playerWithAction.pendingAction = allowedAction
