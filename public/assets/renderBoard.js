@@ -42,6 +42,8 @@ export const renderBoard = (roomId) => {
 		board.width = width * fieldSize * scale
 		board.height = height * fieldSize * scale
 		context.scale(scale, scale)
+		target.style.setProperty('--width', `${width}`)
+		target.style.setProperty('--height', `${height}`)
 
 		food.forEach(({ position: { x, y } }) => {
 			context.beginPath()

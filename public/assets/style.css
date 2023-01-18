@@ -30,7 +30,14 @@ body::before {
 .board {
 	background-color: var(--bs-body-bg);
 	width: 100%;
+	max-width: calc(var(--width) / var(--height) * 90vmin);
 	border: 0.0625rem solid;
+	display: block;
+	margin: 0 auto;
+}
+
+.board + ol {
+	padding-top: 1em;
 }
 
 h1 a {
