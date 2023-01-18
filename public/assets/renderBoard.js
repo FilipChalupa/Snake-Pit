@@ -22,7 +22,6 @@ export const renderBoard = (roomId) => {
 	const loop = async () => {
 		const url = new URL(`${location.origin}/room/${roomId}`)
 		if (isFirstRequest) {
-			isFirstRequest = false
 			url.searchParams.set('immediate', '')
 			target.appendChild(board)
 			target.appendChild(score)
@@ -44,6 +43,14 @@ export const renderBoard = (roomId) => {
 		context.scale(scale, scale)
 		target.style.setProperty('--width', `${width}`)
 		target.style.setProperty('--height', `${height}`)
+
+		if (isFirstRequest) {
+			isFirstRequest = false
+			board.scrollIntoView({
+				behavior: 'smooth',
+				block: 'center',
+			})
+		}
 
 		food.forEach(({ position: { x, y } }) => {
 			context.beginPath()
