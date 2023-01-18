@@ -30,7 +30,6 @@ body::before {
 .board {
 	background-color: var(--bs-body-bg);
 	width: 100%;
-	image-rendering: pixelated;
 	border: 0.0625rem solid;
 }
 

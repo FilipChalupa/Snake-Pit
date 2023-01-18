@@ -34,8 +34,15 @@ export const renderBoard = (roomId) => {
 		if (!isRunning) {
 			return
 		}
-		board.width = width * fieldSize
-		board.height = height * fieldSize
+
+		// Scale canvas
+		const renderedWidth = board.getBoundingClientRect().width
+		const optimalWidth = width * fieldSize // @TODO: handle display DPI (window.devicePixelRatio ?? 1)
+		const scale = Math.max(1, renderedWidth / optimalWidth)
+		board.width = width * fieldSize * scale
+		board.height = height * fieldSize * scale
+		context.scale(scale, scale)
+
 		food.forEach(({ position: { x, y } }) => {
 			context.beginPath()
 			context.arc(
