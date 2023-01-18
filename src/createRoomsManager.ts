@@ -55,14 +55,17 @@ export const createRoomsManager = () => {
 		const waitingRooms = rooms.filter(
 			(otherRoom) => otherRoom.getStatus() === 'waiting',
 		)
-		const isSomeSinglePlayerRoomWaiting = waitingRooms.some(
-			(otherRoom) => otherRoom.maximumPlayers === 1,
-		)
-		if (!isSomeSinglePlayerRoomWaiting) {
-			createRoom(10, 10, 1, 1)
-		} else if (waitingRooms.length === 0) {
-			createRoom(32, 18, 1 + Math.floor(Math.random() * 4), 10)
-		}
+		;[1, 2, 3, 4].forEach((maximumPlayers) => {
+			const isRoomWaiting = waitingRooms.some(
+				(otherRoom) => otherRoom.maximumPlayers === maximumPlayers,
+			)
+			if (!isRoomWaiting) {
+				const width = Math.ceil(Math.random() * 10 + 10)
+				const height = Math.ceil(Math.random() * 10 + 10)
+				const maximumFood = Math.ceil(Math.random() * 10 + 1)
+				createRoom(width, height, maximumPlayers, maximumFood)
+			}
+		})
 	}
 
 	return {
