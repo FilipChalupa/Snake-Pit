@@ -69,28 +69,16 @@ export const createRoom = (
 				// Based on https://metinmediamath.wordpress.com/2013/11/27/how-to-calculate-the-elo-rating-including-example/
 				const score = player.fromHeadPosition.length
 				const otherScore = otherPlayer.fromHeadPosition.length
-
 				const c = 400
-
 				const playerR = Math.pow(10, player.player.getRating() / c)
 				const otherPlayerR = Math.pow(10, otherPlayer.player.getRating() / c)
-
 				const playerE = playerR / (playerR + otherPlayerR)
-				const otherPlayerE = otherPlayerR / (playerR + otherPlayerR)
-
 				const playerS = score > otherScore ? 1 : score === otherScore ? 0.5 : 0
-				const otherPlayerS = 1 - playerS
-
 				const k = 32
-
 				const playerRatingAdjustment = Math.round(k * (playerS - playerE))
-				const otherPlayerRatingAdjustment = Math.round(
-					k * (otherPlayerS - otherPlayerE),
-				)
 
 				pendingUpdates.push(() => {
 					player.player.adjustRating(playerRatingAdjustment)
-					otherPlayer.player.adjustRating(otherPlayerRatingAdjustment)
 				})
 			})
 		})
