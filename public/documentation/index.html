@@ -141,21 +141,25 @@ const { playerToken } = await createPlayerResponse.json()
 // Find room to join
 const listRoomsResponse = await fetch('https://snake-pit.onrender.com/list-rooms')
 const { rooms } = await listRoomsResponse.json()
-const room = rooms.find((room) => room.status === 'waiting')
+const roomId = rooms.find((room) => room.status === 'waiting').id
 
 // Keep going forward
+let action = 'forward'
 while (true) {
 	const payload = {
 		playerToken,
-		action: 'forward',
+		action,
 	}
-	await fetch(`https://snake-pit.onrender.com/room/${room.id}`, {
+	const response = await fetch(`https://snake-pit.onrender.com/room/${roomId}`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify(payload),
 	})
+	const { room } = await response.json()
+	// @TODO: evaluate room state
+	action = Math.random() > 0.2 ? 'forward' : 'right' // randomly turn right
 }
 </code>
 		</pre>
