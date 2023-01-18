@@ -127,7 +127,7 @@ GET /room/<span>:id</span>?immediate</code></pre>
 			<h2 class="mb-4">Very naive JavaScript example</h2>
 			<pre>
 <code class="language-javascript">// Create player
-const createPlayerResponse = await fetch('/create-player', {
+const createPlayerResponse = await fetch('https://snake-pit.onrender.com/create-player', {
 	method: 'POST',
 	headers: {
 		'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const createPlayerResponse = await fetch('/create-player', {
 const { playerToken } = await createPlayerResponse.json()
 
 // Find room to join
-const listRoomsResponse = await fetch('/list-rooms')
+const listRoomsResponse = await fetch('https://snake-pit.onrender.com/list-rooms')
 const { rooms } = await listRoomsResponse.json()
 const room = rooms.find((room) => room.status === 'waiting')
 
@@ -149,7 +149,7 @@ while (true) {
 		playerToken,
 		action: 'forward',
 	}
-	await fetch(`/room/${room.id}`, {
+	await fetch(`https://snake-pit.onrender.com/room/${room.id}`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
