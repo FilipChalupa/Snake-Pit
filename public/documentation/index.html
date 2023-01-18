@@ -53,42 +53,38 @@
 	"name": "Sssneaky"
 }</code></pre>
 			<p>
-				You will get back your personal <code><span>playerToken</span></code
-				>. Keep it and don't share it with others. It will let you authenticate
-				in rooms.
+				You will get back your personal <code>playerToken</code>. Keep it and
+				don't share it with others. It will let you authenticate in rooms.
 			</p>
 
 			<h3 class="mb-4">List rooms</h3>
 			<pre><code>GET /list-rooms</code></pre>
 			<p>
-				List all rooms. Some may be <code><span>"waiting"</span></code> for you.
-				Some may have already started (<code><span>"playing"</span></code
-				>) and some already <code><span>"ended"</span></code
-				>.
+				List all rooms. Some may be <code>"waiting"</code> for you. Some may
+				have already started (<code>"playing"</code>) and some already
+				<code>"ended"</code>.
 			</p>
 
 			<h3 class="mb-4">Perform in-room action</h3>
 			<pre>
-<code>POST /room/<span>:id</span>
+<code>POST /room/:id
 {
-	"playerToken": "<span>xyz123</span>",
+	"playerToken": "xyz123",
 	"action": "forward"
 }</code></pre>
 			<p>
-				Sending any <code><span>action</span></code> to this endpoint will
-				automatically join you to the room.
+				Sending any <code>action</code> to this endpoint will automatically join
+				you to the room.
 			</p>
 			<p>
-				Use <code><span>playerToken</span></code> you have aquired from
-				<code><span>/create-player</span></code> endpoint.
+				Use <code>playerToken</code> you have aquired from
+				<code>/create-player</code> endpoint.
 			</p>
 			<p>
-				All posible actions are <code><span>"forward"</span></code
-				>, <code><span>"left"</span></code
-				>, <code><span>"right"</span></code
-				>. Send any of them accordingly to control your snake. Response to the
-				endpoint above will always give you a new game state with your action
-				applied.
+				All posible actions are <code>"forward"</code>, <code>"left"</code>,
+				<code>"right"</code>. Send any of them accordingly to control your
+				snake. Response to the endpoint above will always give you a new game
+				state with your action applied.
 			</p>
 			<p>
 				Room runs in a loop. In each turn (server tick) it waits for all joined
@@ -97,18 +93,17 @@
 			</p>
 
 			<h3 class="mb-4">Room detail</h3>
-			<pre><code>GET /room/<span>:id</span>
-GET /room/<span>:id</span>?immediate</code></pre>
+			<pre><code>GET /room/:id
+GET /room/:id?immediate</code></pre>
 			<p>
-				Use <code><span>immediate</span></code> get parameter to skip waiting
-				for next server tick. This may be useful for getting an initial room
-				status.
+				Use <code>immediate</code> get parameter to skip waiting for next server
+				tick. This may be useful for getting an initial room status.
 			</p>
 
 			<h3 class="mb-4">Player info</h3>
 			<pre><code>POST /me
 {
-	"playerToken": "<span>xyz123</span>"
+	"playerToken": "xyz123"
 }</code></pre>
 			<p>May be useful to check whether you have a valid token.</p>
 
