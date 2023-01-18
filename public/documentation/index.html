@@ -133,7 +133,7 @@ const createPlayerResponse = await fetch('https://snake-pit.onrender.com/create-
 		'Content-Type': 'application/json',
 	},
 	body: JSON.stringify({
-		name: 'Testing bot',
+		name: prompt("Name your bot:"),
 	}),
 })
 const { playerToken } = await createPlayerResponse.json()
