@@ -155,13 +155,20 @@ export const createRoom = (
 		if (food.length === maximumFood) {
 			return
 		}
-		// @TODO: don't place food on top of players and other food
-		food.push({
-			position: {
+
+		// Try to find empty position
+		for (let i = 0; i < 100; i++) {
+			const position = {
 				x: Math.floor(Math.random() * width),
 				y: Math.floor(Math.random() * height),
-			},
-		})
+			}
+			if (getObjectAtPosition(position).type === 'empty') {
+				food.push({
+					position,
+				})
+				break
+			}
+		}
 	}
 
 	const checkAllReady = () => {
