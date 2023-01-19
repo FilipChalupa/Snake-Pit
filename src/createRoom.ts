@@ -236,6 +236,7 @@ export const createRoom = (
 					) {
 						player.isAlive = false
 						player.fromHeadPosition.shift()
+						// @TODO: find out why head is not reverted to previous position
 					} else if (objectAtHead.type === 'food') {
 						foodIndexesToBeEaten.push(objectAtHead.index)
 					} else {
