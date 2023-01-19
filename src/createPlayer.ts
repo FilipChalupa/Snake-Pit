@@ -16,11 +16,16 @@ export const createPlayer = (token: string, name = '') => {
 	const id = generateId()
 	const color = colors[Math.floor(Math.random() * colors.length)]
 	let rating = 1500
+	let roomsPlayed = 0
 
 	const checkToken = (tokenToValidate: string) => tokenToValidate === token
 
 	const adjustRating = (adjustment: number) => {
 		rating = Math.max(0, rating + adjustment)
+	}
+
+	const increaseRoomsPlayedByOne = () => {
+		roomsPlayed += 1
 	}
 
 	return {
@@ -30,6 +35,8 @@ export const createPlayer = (token: string, name = '') => {
 		getRating: () => rating,
 		adjustRating,
 		checkToken,
+		getRoomsPlayed: () => roomsPlayed,
+		increaseRoomsPlayedByOne,
 	}
 }
 

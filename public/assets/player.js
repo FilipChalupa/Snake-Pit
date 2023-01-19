@@ -2,7 +2,7 @@ import { colorToSymbol } from './colorToSymbol.js'
 import { escape } from './escape.js'
 import { renderBoard } from './renderBoard.js'
 
-const run = async () => {
+const updatePlayerInformation = async (playerId) => {
 	const response = await fetch(`/player/${playerId}`)
 	const { player } = await response.json()
 	if (!player?.id) {
@@ -15,6 +15,12 @@ const run = async () => {
 	)}`
 	const playerRating = document.querySelector('#playerRating')
 	playerRating.textContent = player.rating
+	const playerRoomsPlayed = document.querySelector('#playerRoomsPlayed')
+	playerRoomsPlayed.textContent = player.roomsPlayed
+}
+
+const run = async () => {
+	await updatePlayerInformation(playerId)
 
 	let roomId = null
 	let stopRenderingBoard = () => {}
@@ -38,6 +44,7 @@ const run = async () => {
 		if (newRoom && newRoom.id !== roomId) {
 			stopRenderingBoard()
 			roomId = newRoom.id
+			await updatePlayerInformation(playerId)
 			stopRenderingBoard = renderBoard(roomId)
 		}
 

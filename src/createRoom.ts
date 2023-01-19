@@ -62,6 +62,7 @@ export const createRoom = (
 	const updateRating = () => {
 		const pendingUpdates: Array<() => void> = []
 		players.forEach((player) => {
+			player.player.increaseRoomsPlayedByOne()
 			players.forEach((otherPlayer) => {
 				if (player.player.id === otherPlayer.player.id) {
 					return

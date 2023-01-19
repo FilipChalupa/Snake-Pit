@@ -63,6 +63,7 @@ const getPlayerInformation = (player: Player) => ({
 	color: player.color,
 	name: player.name,
 	rating: player.getRating(),
+	roomsPlayed: player.getRoomsPlayed(),
 })
 app.post('/create-player', (request, response) => {
 	const name = (() => {
