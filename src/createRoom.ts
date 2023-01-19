@@ -48,6 +48,64 @@ export const createRoom = (
 		performActionsIfPossible()
 	})
 
+	const getObjectAtPosition = (
+		position: Position,
+		player?: PlayingPlayer,
+	):
+		| { type: 'empty' }
+		| {
+				type: 'food'
+				index: number
+		  }
+		| { type: 'otherBody' }
+		| { type: 'ownBody' }
+		| { type: 'ownHead' }
+		| { type: 'wall' } => {
+		const isOutside =
+			position.x < 0 ||
+			position.x >= width ||
+			position.y < 0 ||
+			position.y >= height
+		if (isOutside) {
+			return { type: 'wall' }
+		}
+		const foodIndexAtHeadPosition = food.findIndex(
+			(food) =>
+				food.position.x === position.x && food.position.y === position.y,
+		)
+		if (foodIndexAtHeadPosition >= 0) {
+			return { type: 'food', index: foodIndexAtHeadPosition }
+		}
+		if (player) {
+			const isOwnHead =
+				player.fromHeadPosition[0].x === position.x &&
+				player.fromHeadPosition[0].y === position.y
+			if (isOwnHead) {
+				return { type: 'ownHead' }
+			}
+			const isOwnBody = player.fromHeadPosition.some(
+				(playerPosition) =>
+					playerPosition.x === position.x && playerPosition.y === position.y,
+			)
+			if (isOwnBody) {
+				return { type: 'ownBody' }
+			}
+		}
+		const isOtherBody = players.some((otherPlayer) =>
+			otherPlayer.fromHeadPosition.some(
+				(playerPosition) =>
+					otherPlayer.player.id !== player?.player.id &&
+					playerPosition.x === position.x &&
+					playerPosition.y === position.y,
+			),
+		)
+		if (isOtherBody) {
+			return { type: 'otherBody' }
+		}
+
+		return { type: 'empty' }
+	}
+
 	const changeStatus = (newStatus: Status) => {
 		if (status === newStatus) {
 			return
@@ -161,43 +219,20 @@ export const createRoom = (
 			})
 			players.forEach((player) => {
 				if (player.isAlive) {
-					// Check collision
 					const headPosition = player.fromHeadPosition[0]
+					const objectAtHead = getObjectAtPosition(headPosition, player)
 
-					// Eat food
-					const isEatingFood = (() => {
-						const foodIndexAtHeadPosition = food.findIndex(
-							(food) =>
-								food.position.x === headPosition.x &&
-								food.position.y === headPosition.y,
-						)
-						if (foodIndexAtHeadPosition >= 0) {
-							foodIndexesToBeEaten.push(foodIndexAtHeadPosition)
-							return true
-						}
-						return false
-					})()
-
-					const isOutside =
-						headPosition.x < 0 ||
-						headPosition.x >= width ||
-						headPosition.y < 0 ||
-						headPosition.y >= height
-					const isCollidingWithABody = players.some((otherPlayer) =>
-						otherPlayer.fromHeadPosition.some(
-							(playerPosition, i) =>
-								(otherPlayer.player.id !== player.player.id || i !== 0) &&
-								playerPosition.x === headPosition.x &&
-								playerPosition.y === headPosition.y,
-						),
-					)
-					if (isOutside || isCollidingWithABody) {
+					if (
+						objectAtHead.type === 'wall' ||
+						objectAtHead.type === 'otherBody' ||
+						objectAtHead.type === 'ownBody'
+					) {
 						player.isAlive = false
 						player.fromHeadPosition.shift()
+					} else if (objectAtHead.type === 'food') {
+						foodIndexesToBeEaten.push(objectAtHead.index)
 					} else {
-						if (!isEatingFood) {
-							player.fromHeadPosition.pop()
-						}
+						player.fromHeadPosition.pop()
 					}
 				}
 			})
