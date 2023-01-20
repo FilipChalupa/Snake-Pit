@@ -69,13 +69,6 @@ export const createRoom = (
 		if (isOutside) {
 			return { type: 'wall' }
 		}
-		const foodIndexAtHeadPosition = food.findIndex(
-			(food) =>
-				food.position.x === position.x && food.position.y === position.y,
-		)
-		if (foodIndexAtHeadPosition >= 0) {
-			return { type: 'food', index: foodIndexAtHeadPosition }
-		}
 		if (player) {
 			const isOwnHead =
 				player.fromHeadPosition[0].x === position.x &&
@@ -101,6 +94,13 @@ export const createRoom = (
 		)
 		if (isOtherBody) {
 			return { type: 'otherBody' }
+		}
+		const foodIndexAtHeadPosition = food.findIndex(
+			(food) =>
+				food.position.x === position.x && food.position.y === position.y,
+		)
+		if (foodIndexAtHeadPosition >= 0) {
+			return { type: 'food', index: foodIndexAtHeadPosition }
 		}
 
 		return { type: 'empty' }
