@@ -88,16 +88,15 @@ export const createRoom = (
 			return { type: 'otherBody' }
 		}
 		if (player) {
-			const isOwnHead =
-				player.fromHeadPosition[0].x === position.x &&
-				player.fromHeadPosition[0].y === position.y
-			const isOwnBody = player.fromHeadPosition.some(
+			const [head, ...body] = player.fromHeadPosition
+			const isOwnBody = body.some(
 				(playerPosition) =>
 					playerPosition.x === position.x && playerPosition.y === position.y,
 			)
-			if (isOwnBody && !isOwnHead) {
+			if (isOwnBody) {
 				return { type: 'ownBody' }
 			}
+			const isOwnHead = head.x === position.x && head.y === position.y
 			if (isOwnHead) {
 				return { type: 'ownHead' }
 			}
