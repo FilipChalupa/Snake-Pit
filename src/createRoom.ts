@@ -69,6 +69,24 @@ export const createRoom = (
 		if (isOutside) {
 			return { type: 'wall' }
 		}
+		const foodIndexAtHeadPosition = food.findIndex(
+			(food) =>
+				food.position.x === position.x && food.position.y === position.y,
+		)
+		if (foodIndexAtHeadPosition >= 0) {
+			return { type: 'food', index: foodIndexAtHeadPosition }
+		}
+		const isOtherBody = players.some((otherPlayer) =>
+			otherPlayer.fromHeadPosition.some(
+				(playerPosition) =>
+					otherPlayer.player.id !== player?.player.id &&
+					playerPosition.x === position.x &&
+					playerPosition.y === position.y,
+			),
+		)
+		if (isOtherBody) {
+			return { type: 'otherBody' }
+		}
 		if (player) {
 			const isOwnHead =
 				player.fromHeadPosition[0].x === position.x &&
@@ -83,24 +101,6 @@ export const createRoom = (
 			if (isOwnBody) {
 				return { type: 'ownBody' }
 			}
-		}
-		const isOtherBody = players.some((otherPlayer) =>
-			otherPlayer.fromHeadPosition.some(
-				(playerPosition) =>
-					otherPlayer.player.id !== player?.player.id &&
-					playerPosition.x === position.x &&
-					playerPosition.y === position.y,
-			),
-		)
-		if (isOtherBody) {
-			return { type: 'otherBody' }
-		}
-		const foodIndexAtHeadPosition = food.findIndex(
-			(food) =>
-				food.position.x === position.x && food.position.y === position.y,
-		)
-		if (foodIndexAtHeadPosition >= 0) {
-			return { type: 'food', index: foodIndexAtHeadPosition }
 		}
 
 		return { type: 'empty' }
@@ -238,6 +238,7 @@ export const createRoom = (
 						player.fromHeadPosition.shift()
 						// @TODO: find out why head is not reverted to previous position
 					} else if (objectAtHead.type === 'food') {
+						console.log('Eat', objectAtHead.index)
 						foodIndexesToBeEaten.push(objectAtHead.index)
 					} else {
 						player.fromHeadPosition.pop()
