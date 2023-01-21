@@ -26,7 +26,8 @@ type Status = 'waiting' | 'playing' | 'ended'
 
 const maximumTimeToAction = 1000
 const maximumIdleTime = 60000
-const artificialDelayTime = 200
+const artificialDelayTimeWhileNotPlaying = 2000
+const artificialDelayTimeWhilePlaying = 200
 
 export const createRoom = (
 	onRoomAbandoned = () => {},
@@ -48,7 +49,15 @@ export const createRoom = (
 		performActionsIfPossible()
 	})
 
-	const getMaximumTimeToAction = () => maximumTimeToAction
+	const getArtificialDelayTime = () => {
+		if (status === 'playing') {
+			return artificialDelayTimeWhilePlaying
+		}
+		return artificialDelayTimeWhileNotPlaying
+	}
+	const getMaximumTimeToAction = () => {
+		return Math.max(maximumTimeToAction, getArtificialDelayTime() + 1)
+	}
 	const getMaximumIdleTime = () => maximumIdleTime
 
 	const getObjectAtPosition = (
@@ -259,7 +268,7 @@ export const createRoom = (
 		})
 		pendingNextTickObservations = []
 		timeoutPerform = setTimeout(performActions, getMaximumTimeToAction())
-		artificialActionsDelay.startDelay(artificialDelayTime)
+		artificialActionsDelay.startDelay(getArtificialDelayTime())
 	}
 
 	const getTimeInTicks = () => timeInTicks
