@@ -48,6 +48,9 @@ export const createRoom = (
 		performActionsIfPossible()
 	})
 
+	const getMaximumTimeToAction = () => maximumTimeToAction
+	const getMaximumIdleTime = () => maximumIdleTime
+
 	const getObjectAtPosition = (
 		position: Position,
 		player?: PlayingPlayer,
@@ -147,7 +150,7 @@ export const createRoom = (
 		clearTimeout(timeoutIdle)
 		timeoutIdle = setTimeout(() => {
 			onRoomAbandoned()
-		}, maximumIdleTime)
+		}, getMaximumIdleTime())
 	}
 
 	const placeFood = () => {
@@ -255,7 +258,7 @@ export const createRoom = (
 			pendingObservation.onTick()
 		})
 		pendingNextTickObservations = []
-		timeoutPerform = setTimeout(performActions, maximumTimeToAction)
+		timeoutPerform = setTimeout(performActions, getMaximumTimeToAction())
 		artificialActionsDelay.startDelay(artificialDelayTime)
 	}
 
