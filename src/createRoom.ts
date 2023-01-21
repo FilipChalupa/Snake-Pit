@@ -91,15 +91,15 @@ export const createRoom = (
 			const isOwnHead =
 				player.fromHeadPosition[0].x === position.x &&
 				player.fromHeadPosition[0].y === position.y
-			if (isOwnHead) {
-				return { type: 'ownHead' }
-			}
 			const isOwnBody = player.fromHeadPosition.some(
 				(playerPosition) =>
 					playerPosition.x === position.x && playerPosition.y === position.y,
 			)
-			if (isOwnBody) {
+			if (isOwnBody && !isOwnHead) {
 				return { type: 'ownBody' }
+			}
+			if (isOwnHead) {
+				return { type: 'ownHead' }
 			}
 		}
 
@@ -238,7 +238,6 @@ export const createRoom = (
 						player.fromHeadPosition.shift()
 						// @TODO: find out why head is not reverted to previous position
 					} else if (objectAtHead.type === 'food') {
-						console.log('Eat', objectAtHead.index)
 						foodIndexesToBeEaten.push(objectAtHead.index)
 					} else {
 						player.fromHeadPosition.pop()
