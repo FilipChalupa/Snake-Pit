@@ -38,7 +38,12 @@ const run = async () => {
 			}
 			const waitingRoom =
 				roomsWithPlayer.find((room) => room.status === 'waiting') ?? null
-			return waitingRoom
+			if (waitingRoom) {
+				return waitingRoom
+			}
+			const endedRoom =
+				roomsWithPlayer.find((room) => room.status === 'ended') ?? null
+			return endedRoom
 		})()
 
 		if (newRoom && newRoom.id !== roomId) {
